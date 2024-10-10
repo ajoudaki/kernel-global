@@ -9,8 +9,9 @@
 \usepackage{subcaption}
 \usepackage{xcolor}
 
-\newcommand{\avg}{\mathrm{avg}}
-\newcommand{\E}{\mathbb{E}}
+\newcommand{\avg}{\text{avg}}
+\newcommand{\res}{\text{res}}
+\newcommand{\E}{\E}
 \newcommand{\he}{\mathrm{he}}
 \newcommand{\He}{\mathrm{He}}
 \newtheorem{theorem}{Theorem}
@@ -41,20 +42,39 @@ Understanding how neural networks transform input data across layers is fundamen
 
 % \section{Fixed-points and global convergence of deep representations}
 % \label{ch:isometry_activation}
-
 \section{Introduction}
-The study of neural networks has increasingly focused on understanding the internal mechanisms that govern their learning and generalization capabilities. A central aspect of this inquiry is how neural networks transform and preserve input data structure as it passes through multiple layers. One powerful approach to studying these transformations is through the lens of kernel methods, which have long been used in machine learning to understand the relationships between data points in high-dimensional spaces \citep{scholkopf2002learning,smola2004tutorial}.
+Deep neural networks have revolutionized various fields, from computer vision to natural language processing, due to their remarkable ability to learn complex patterns from data. Understanding the internal mechanisms that govern their learning and generalization capabilities remains a fundamental challenge. 
+One approach to studying these transformations is through the lens of kernel methods. Kernel methods have a long-standing history in machine learning for analyzing relationships between data points in high-dimensional spaces \citep{scholkopf2002learning, smola2004tutorial}. They provide a framework for understanding the similarity measures that underpin many learning algorithms. Recent theoretical studies have increasingly focused on analyzing neural networks from the perspective of kernels. The Neural Tangent Kernel (NTK) introduced by \citet{jacot2018neural} is a seminal work that provided a way to analyze the training dynamics of infinitely wide neural networks using kernel methods. This perspective has been further explored in various contexts, leading to significant advancements in our understanding of neural networks \citep{lee2019wide, arora2019exact, yang2019scaling}.
 
-Analyzing neural networks from the perspective of kernels has been the subject of many theoretical studies. This perspective has led to significant advancements, most notably the Neural Tangent Kernel (NTK) introduced by \citet{jacot2018neural}, which provided a framework to analyze the training dynamics of infinitely wide neural networks. Additionally, Convolutional Kernel Networks by \citet{mairal2014convolutional} and the notion of dual kernels in \citet{daniely2016toward} have expanded our understanding of neural networks through kernel methods. The idea that neural networks, especially in the infinite-width limit, can be understood through the lens of kernels has been explored in various recent works~\citep{lee2019wide, arora2019exact, yang2019scaling}. Moreover, the use of kernel methods to measure the similarity between inputs as the network processes them provides a powerful means of understanding the inductive biases and representative capacity of neural networks, particularly in the context of deep learning (cf.~\citep{zhang2017understanding,zhang2021understanding,cho2009kernel}).
+Despite these advances, an important question remains underexplored: \emph{How does the similarity between hidden layer representations evolve across layers, and how is that affected by particular choices of non-linear functions?} Previous works have primarily focused on local behaviors or specific initialization conditions \citep{saxe2013exact, schoenholz2016deep, pennington2017resurrecting}. A comprehensive global analysis of fixed points and convergence properties of kernel sequences, particularly in the presence of nonlinear activations, is still incomplete.
 
-Despite this extensive line of research, the question of how the similarity between hidden layer representations evolves across layers and whether it converges globally to a fixed point remains an important but underexplored area of study. Previous works, such as \citet{saxe2013exact}, \citet{schoenholz2016deep}, and \citet{pennington2017resurrecting}, have analyzed signal propagation and dynamical isometry in deep networks, focusing on local behaviors and specific initialization conditions. However, a comprehensive global analysis of fixed points and convergence properties of kernel sequences, particularly in the presence of nonlinear activations, is still incomplete. Specifically, while previous research has provided insights into local behaviors (cf.~\citep{yang2019meanfield}), a global analysis of fixed points and convergence properties of kernel sequences, particularly in the presence of nonlinear activations is still incomplete.
+This paper addresses this gap by introducing and analyzing the evolution of kernel sequences in deep neural networks. Specifically, we consider the kernel sequence $k(h^\ell(x), h^\ell(y))$, where $k$ denotes a similarity measure (such as inner product or cosine similarity), and $h^\ell(x)$ and $h^\ell(y)$ are the representations of inputs $x$ and $y$ at layer $\ell$. Understanding whether and how this sequence converges to a fixed point as the network depth increases is crucial for uncovering the inherent implicit biases of deep networks.
 
-This paper addresses this gap by introducing and analyzing the evolution of the kernel through layers. The kernel sequence tracks the similarity between two inputs. More concretely, we consider the kernel sequence $k(h^\ell(x), h^\ell(y)),$ where $k$ denotes some notion of similarity, such as inner product or cosine similarity, and $h^\ell(x)$ and $h^\ell(y)$ denote layer $\ell$ representation for respective inputs $x$ and $y$. Understanding whether and how this sequence converges to a fixed point as the network depth increases is crucial for uncovering the inherent implicit biases of deep networks.
+Our analysis builds upon foundational work in neural network theory, and leverages mean field theory to simplify the analysis. By considering the infinite-width limit, stochastic sequences become deterministic, allowing us to focus on the underlying dynamics without the interference of random fluctuations \citep{poole2016exponential, yang2019meanfield, mei2019mean}.
 
-Our analysis builds upon foundational work in understanding the role of activation functions in neural networks, such as the use of ReLU and its variants (cf.~\citep{glorot2011deep, nair2010rectified}) and the exploration of nonlinear activations in large-scale models by~\citep{ramachandran2017searching, clevert2015fast}. Additionally, the interplay between activation functions and normalization techniques, such as layer normalization (\citep{ba2016layer}), plays a critical role in shaping the convergence behavior of kernel sequences (\citep{klambauer2017self, hayou2019impact}). Moreover, the study of neural networks through the lens of kernel methods is deeply connected to earlier work by \citep{williams2006gaussian} on Gaussian processes and the dynamics of signal propagation in deep networks in \citep{poole2016exponential, raghu2017expressive}. By analyzing how these kernels evolve across layers, particularly in terms of activation functions, we contribute to a deeper understanding of the dynamics within deep neural networks.
+\textbf{Contributions:} 
+\begin{itemize}
+    \item We provide a global analysis of the convergence properties of kernel sequences in deep neural networks with nonlinear activations.
+    \item By employing Hermite polynomial expansions, we derive explicit forms of the kernel map and identify its fixed points.
+    \item We demonstrate that for a wide class of activation functions, the kernel sequence converges to a unique fixed point, revealing inherent biases in deep representations.
+    \item We extend our analysis to networks with normalization layers and residual connections, highlighting their impact on the convergence behavior.
+\end{itemize}
 
-Throughout this paper, we assume that the network operates under the mean field regime, which simplifies the analysis by considering the infinite-width limit and making stochastic sequences deterministic. This approach is inspired by prior studies that have employed mean field theory to analyze neural networks \citep{poole2016exponential, yang2019meanfield, mei2019mean}.
-% \thomas{Would be good to provide a reference and explain a bit more. Not all readers may be familiar.}
+Understanding these dynamics contributes to a deeper comprehension of how deep neural networks process and encode information, shedding light on their representational capacities and limitations.
+
+% \section{Introduction}
+% The study of neural networks has increasingly focused on understanding the internal mechanisms that govern their learning and generalization capabilities. A central aspect of this inquiry is how neural networks transform and preserve input data structure as it passes through multiple layers. One powerful approach to studying these transformations is through the lens of kernel methods, which have long been used in machine learning to understand the relationships between data points in high-dimensional spaces \citep{scholkopf2002learning,smola2004tutorial}.
+
+% Analyzing neural networks from the perspective of kernels has been the subject of many theoretical studies. This perspective has led to significant advancements, most notably the Neural Tangent Kernel (NTK) introduced by \citet{jacot2018neural}, which provided a framework to analyze the training dynamics of infinitely wide neural networks. Additionally, Convolutional Kernel Networks by \citet{mairal2014convolutional} and the notion of dual kernels in \citet{daniely2016toward} have expanded our understanding of neural networks through kernel methods. The idea that neural networks, especially in the infinite-width limit, can be understood through the lens of kernels has been explored in various recent works~\citep{lee2019wide, arora2019exact, yang2019scaling}. Moreover, the use of kernel methods to measure the similarity between inputs as the network processes them provides a powerful means of understanding the inductive biases and representative capacity of neural networks, particularly in the context of deep learning (cf.~\citep{zhang2017understanding,zhang2021understanding,cho2009kernel}).
+
+% Despite this extensive line of research, the question of how the similarity between hidden layer representations evolves across layers and whether it converges globally to a fixed point remains an important but underexplored area of study. Previous works, such as \citet{saxe2013exact}, \citet{schoenholz2016deep}, and \citet{pennington2017resurrecting}, have analyzed signal propagation and dynamical isometry in deep networks, focusing on local behaviors and specific initialization conditions. However, a comprehensive global analysis of fixed points and convergence properties of kernel sequences, particularly in the presence of nonlinear activations, is still incomplete. Specifically, while previous research has provided insights into local behaviors (cf.~\citep{yang2019meanfield}), a global analysis of fixed points and convergence properties of kernel sequences, particularly in the presence of nonlinear activations, is still incomplete.
+
+% This paper addresses this gap by introducing and analyzing the evolution of the kernel through layers. The kernel sequence tracks the similarity between two inputs. More concretely, we consider the kernel sequence $k(h^\ell(x), h^\ell(y)),$ where $k$ denotes some notion of similarity, such as inner product or cosine similarity, and $h^\ell(x)$ and $h^\ell(y)$ denote layer $\ell$ representation for respective inputs $x$ and $y$. Understanding whether and how this sequence converges to a fixed point as the network depth increases is crucial for uncovering the inherent implicit biases of deep networks.
+
+% Our analysis builds upon foundational work in understanding the role of activation functions in neural networks, such as the use of ReLU and its variants (cf.~\citep{glorot2011deep, nair2010rectified}) and the exploration of nonlinear activations in large-scale models by~\citep{ramachandran2017searching, clevert2015fast}. Additionally, the interplay between activation functions and normalization techniques, such as layer normalization (\citep{ba2016layer}), plays a critical role in shaping the convergence behavior of kernel sequences (\citep{klambauer2017self, hayou2019impact}). Moreover, the study of neural networks through the lens of kernel methods is deeply connected to earlier work by \citep{williams2006gaussian} on Gaussian processes and the dynamics of signal propagation in deep networks in \citep{poole2016exponential, raghu2017expressive}. By analyzing how these kernels evolve across layers, particularly in terms of activation functions, we contribute to a deeper understanding of the dynamics within deep neural networks.
+
+% Throughout this paper, we assume that the network operates under the mean field regime, which simplifies the analysis by considering the infinite-width limit and making stochastic sequences deterministic. This approach is inspired by prior studies that have employed mean field theory to analyze neural networks \citep{poole2016exponential, yang2019meanfield, mei2019mean}.
+% % \thomas{Would be good to provide a reference and explain a bit more. Not all readers may be familiar.}
 
 \section{Related works}
 The study of deep neural networks through the lens of kernel methods and mean field theory has garnered significant interest in recent years. Notably, the Neural Tangent Kernel (NTK) introduced by \citet{jacot2018neural} provided a framework to analyze the training dynamics of infinitely wide neural networks using kernel methods. This perspective was further expanded upon by \citet{lee2019wide} and \citet{arora2019exact}, who explored the connections between neural networks and Gaussian processes.
@@ -98,7 +118,7 @@ As will be proven later, the deterministic transition of this sequence follows a
     \label{def:kernel_map}
 Given two random variables $X, Y$ with covariance $\rho,$ and activation $\phi,$ define the \emph{kernel map } $\kappa$ as the mapping between the covariance of pre-activations and the covariance of post-activations:
 \begin{align}
-& \kappa(\rho):=\mathbb{E}[\phi(X)\phi(Y)], && 
+& \kappa(\rho):=\E\,\phi(X)\phi(Y), && 
  X, Y\sim \mathcal N\left(0, \begin{pmatrix} 1 & \rho \\ \rho & 1 \end{pmatrix}
  \right)
  \label{eq:kernel_map}
@@ -120,7 +140,7 @@ In the mean field regime with $d \to \infty$, let $\rho_\ell$ denote the kernel 
 where the initial value $\rho_0$ corresponds to the input, and $\kappa$ is defined in Definition~\ref{def:kernel_map}. 
 % \thomas{Changed this a bit. Original is in comment.}
 % \begin{align*}
-% &\rho_{\ell} = \mathbb{E}_{X,Y}[\phi(X)\phi(Y)], && 
+% &\rho_{\ell} = \E_{X,Y}[\phi(X)\phi(Y)], && 
 %  X, Y\sim N(0,1),\; \E XY = \rho_{\ell-1}.
 % \end{align*}
 % where the initial value $\rho_0$ corresponds to the input. 
@@ -137,9 +157,7 @@ Historically, conditions similar to $\E \phi(X)^2=1$ have been used to prevent q
 One interesting observation is that the kernel dynamics is governed by kernel map $\kappa,$ defined based on Gaussian pre-activations, even if the weights are not Gaussian matrices. The main insight for this equivalence is that as long as elements are drawn i.i.d.~from a zero mean unit variance distribution, we can apply Central Limit Theorem (CLT) to conclude that pre-activations follow the Gaussian distribution. This simple yet elegant observation gives us a very powerful tool to study kernel dynamics by leveraging algebraic properties for Gaussian pre-activations, and automatically get the same results for a wide class of distributions. 
 
 Proposition~\ref{prop:mean_field_kernel_general} tells us that the sequence is given by $\rho_0,\kappa(\rho_0),\kappa(\kappa(\rho_0)),\dots\,.$ Thus, we can analyze its convergence by studying the fixed-points of the kernel map $\kappa,$
-which are the values of $\rho^*$ that satisfy $\kappa(\rho^*) = \rho^*.$ 
-
-With the assumption that $\E \phi(X)^2=1,$ the kernel map $\kappa$ is a mapping between $[-1,-1]$ to itself. Thus, Brower's fixed-point theorem implies that the kernel map $\kappa$ has at least one fixed point $\rho^*.$ But as we will show, there is potentially more than one fixed point, and it will be interesting to understand which ones are locally or globally attractive. 
+which are the values of $\rho^*$ that satisfy $\kappa(\rho^*) = \rho^*.$  With the assumption that $\E \phi(X)^2=1,$ the kernel map $\kappa$ is a mapping between $[-1,-1]$ to itself. Thus, Brower's fixed-point theorem implies that the kernel map $\kappa$ has at least one fixed point $\rho^*.$ But as we will show, there is potentially more than one fixed point, and it will be interesting to understand which ones are locally or globally attractive. 
 
 
 \section{Hermite expansion of activation functions}
@@ -174,13 +192,13 @@ While Hermite polynomials have been traditionally used in probability theory and
 
 The crucial property of Hermite polynomials is their  orthogonality:
 \begin{align}\label{eq:hermite_orthogonality}
-\E\left[\he_k(X)\he_l(X)\right] = \delta_{kl}, \quad X \sim \mathcal N(0,1).
+\E\,\he_k(X)\he_l(X) = \delta_{kl}, \quad X \sim \mathcal N(0,1).
 \end{align}
 The scaling by $1/\sqrt{k!}$ ensures that polynomials form an \emph{orthonormal} basis.  Based on this property, we can define:
 \begin{definition}\label{def:hermite_expansion}
 Given a function $\phi$, square-integrable with respect to the Gaussian measure. Its Hermite expansion is given by:
 \begin{align*}
-\phi = \sum_{k=0}^\infty c_k \he_k,\; c_k = \E\left[\phi(X) \he_k(X)\right], \; X \sim \mathcal N (0,1)\,.
+\phi = \sum_{k=0}^\infty c_k \he_k,\quad c_k = \E\,\phi(X) \he_k(X), \; X \sim \mathcal N (0,1)\,.
 \end{align*}
 Here $c_k$ are called the Hermite coefficients of $\phi$. 
 \end{definition}
@@ -192,7 +210,7 @@ Besides orthogonality, Hermite polynomials have another `magical' property that 
 \begin{lemma}[Mehler's lemma]\label{lem:mehler_kernel}
 For standard-normal random variables $X,Y$ with covariance $\rho$ it holds
 \begin{align*}
-\E\left[\he_k(X)\he_l(Y)\right] = \rho^n \delta_{kl}, && X, Y\sim \mathcal N\left(0, \begin{pmatrix} 1 & \rho \\ \rho & 1 \end{pmatrix}
+\E\,\he_k(X)\he_l(Y) = \rho^n \delta_{kl}, && X, Y\sim \mathcal N\left(0, \begin{pmatrix} 1 & \rho \\ \rho & 1 \end{pmatrix}
  \right).
 \end{align*}
 \end{lemma}
@@ -283,13 +301,15 @@ In this section, we investigate properties in the kernel maps lead to convergenc
 Finally, we can state one of the central results of this chapter, which characterizes the global convergence of the kernel map towards the fixed point $\rho^*=0.$
 
 \begin{theorem}\label{thm:global_attract_centered}
-Let $\phi$ be an activation function with kernel map $\kappa$ that is centered $\kappa(0)=0,$ and $\kappa(1)=1$. \thomas{So you are saying $\{0,1\}$ are fixed points, I guess?} Let $\rho_\ell$ be the kernel sequence generated by $\kappa$, given the initial value $\rho_0 \in(-1 , 1)$.
+Let $\phi$ be a non-linear activation with kernel map $\kappa$ that is centered $\kappa(0)=0,$ and $\kappa(1)=1$. 
+% \thomas{So you are saying $\{0,1\}$ are fixed points, I guess?} 
+Let $\rho_\ell$ be the kernel sequence generated by $\kappa$, given the initial value $\rho_0 \in(-1 , 1)$.
 % \thomas{I think you need to exclude the non-stable fixed point. Added the inequality.} 
 Then, the sequence contracts towards the fixed-point at zero $\rho^*=0$ with rate $\alpha$:
     \begin{align}
         &\frac{|\rho_\ell|}{1-|\rho_\ell|} \le \frac{|\rho_0|}{1-|\rho_0|}\alpha^{\ell}, && \alpha := \frac{1}{2-\kappa'(0)},
     \end{align}
- where $\alpha<1$ if the activation is non-linear. The only other fixed points can be $\rho^*=\pm 1$, and none of them is locally or globally attractive.
+ where $\alpha<1.$ The only other fixed points can be $\rho^*=\pm 1$, and none of them is locally or globally attractive.
 \end{theorem}
 
 % Note that the statement becomes vacuous if the initial covariance is $\rho_0 = 1$ or $\rho_0 = -1$, as in these cases, the right-hand side goes to infinity, but the theorem is non-vacuous for all $\rho_0\in(-1,1).$ This is unsurprising, as the kernel map cannot separate the two inputs if they are identical or anti-identical. \thomas{I would restate. I would also simply exclude the boundary points from consideration to make the theorem above simpler. Maybe one can simple deal with the special cases in a corollarly.} In plain words, this states that if the two samples are not identical, by iteratively passing them through a nonlinear activation, the covariance between them will contract with rate $\alpha$ in expectation. \thomas{I would not say it like this. You are passing the inputs through a random ensemble and consider what happens in expectation.}  While it may not seem immediately obvious why $\alpha < 1$ for non-linear activations, the following remark makes the connection between the two.
@@ -300,7 +320,7 @@ Then, the sequence contracts towards the fixed-point at zero $\rho^*=0$ with rat
 % \end{remark}
 % \thomas{I am a bit lost of what the remark is trying to get at. Can you perhaps first add some remarks to why $\kappa'$ matters and what condition ensures stability or convergence. This is not quite clear.}
 
-Another observation is that rather than proving convergence directly, we showed contraction under the potential $|\rho|/(1-|\rho|).$ Because $|\rho|/(1-|\rho|)$ is a monotonically increasing with $|\rho|$, the contraction of $|\rho_\ell|/(1-|\rho_\ell|)$ implies contraction of $|\rho_\ell|$ towards zero. 
+Note that rather than proving convergence directly, we showed contraction under the potential $|\rho|/(1-|\rho|).$ Because $|\rho|/(1-|\rho|)$ is a monotonically increasing with $|\rho|$, the contraction of $|\rho_\ell|/(1-|\rho_\ell|)$ implies contraction of $|\rho_\ell|$ towards zero. 
 While this form might look mysterious at first sight, there is an intuitive way of understanding why it occurs in our convergence formula. This insight comes from approximating our discrete dynamics in depth by a continuous time dynamical system. 
 
 % \begin{corollary}
@@ -320,7 +340,7 @@ While this form might look mysterious at first sight, there is an intuitive way 
 %  where $\alpha$ is defined in \eqref{eq:contraction_rate}, which becomes strictly less than one if the activation is non-linear. 
 % \end{theorem}
 
-\subsection*{A continuous time differential equation approximation to the kernel dynamics} 
+\subsection*{A continuous time differential equation view to the kernel dynamics} 
 One of the most helpful ways to find insights into discrete fixed point iterations is to cast them as a continuous problem. More specifically, consider our fixed point iteration: 
 \begin{align*}
     % \rho_{\ell+1} &= \kappa(\rho_\ell) = \sum_{k=1}^\infty c_k^2 \rho^k,\\
@@ -337,7 +357,7 @@ While the kernel ODE presents an interesting transformation of the problem, it d
 \subsection*{Kernel ODE for centered activations}
 For the case of centered activation in Theorem~\ref{thm:global_attract_centered}, the kernel ODE is given by
 \begin{align*}
-    \rho' = -(1-c_1^2)\rho + \sum_{k=2}^\infty c_k^2\rho^k\,,
+    d\rho/dt = -(1-c_1^2)\rho + \sum_{k=2}^\infty c_k^2\rho^k\,,
 \end{align*}
 where the first term $k=0$ is canceled due to the assumption $\kappa(0)=c_0^2 = 1.$ 
 
@@ -347,7 +367,7 @@ Observe that $\rho'<0$ when $\rho>0,$ and $\rho'>0$ when $\rho<0.$ This implies 
 Let us first consider the dynamics when $\rho\ge 0.$ 
 In this case term corresponding to $k=1$ contribute positively to a faster convergence, while terms $k\ge 2$ make convergence slower. In light of this observation, a worst case (slowest possible) convergence rate happens when the positive terms are maximized, which occurs when the weight of all $\sum_{k=2}^\infty c_k^2 $ is concentrated on the $k=2$ term. \thomas{That makes sense. What is the worst case $\phi$? Does it make sense to state this for better illustration?}
 \begin{align*}
-    \frac{d\rho}{dt} &=  -(1-c_1^2)\rho + (1-c_1^2) \rho^2.
+    d\rho/dt &=  -(1-c_1^2)\rho + (1-c_1^2) \rho^2.
     % \\
     % &= -(1-c_1^2) \rho(1-\rho).
 \end{align*}
@@ -372,7 +392,7 @@ where $C$ corresponds to the initial values.
 \textit{Negative range.}
 Now let us assume $\rho<0.$ In this case, only the odd terms in $\sum_{k=2}^\infty c_k^2 \rho^k$ contribute to a slowdown in convergence. Thus, the worst case occurs when all the weight of coefficients is concentrated in $k=3,$ corresponding to kernel equation 
 \begin{align*}
-&\frac{d\rho}{dt} = -(1-c_1^2)\rho + (1-c_1^2) \rho^3\\
+&d\rho/dt = -(1-c_1^2)\rho + (1-c_1^2) \rho^3\\
 \implies    &\int \frac{d\rho}{\rho(1-\rho^2)} = -(1-c_1^2)\int dt \\
 % \implies \ln\left(\frac{|\rho(t)|}{\sqrt{1-\rho^2(t)}}\right) = - t (1-c_1^2) + B\\
 \implies &\frac{|\rho(t)|}{\sqrt{1-\rho^2(t)}} = C' \exp(-t(1-c_1^2)),
@@ -392,14 +412,15 @@ Now, we can use a numerical inequality $\sqrt{1-x^2} \ge 1-|x|$ valid for all $x
 \end{align*}
 where we have also replaced $c_1^2=\kappa'(1).$  
 
-We can observe that the kernel ODE rate derived by analysis of kernel ODE is largely aligned exponential convergence of this term in Theorem~\ref{thm:global_attract_centered}. The slight discrepancy between the exponential rates between Theorem~\ref{thm:global_attract_centered} and the kernel ODE rate $\exp(-(1-\kappa'(0))$ is due to the discrete-continuous approximation. 
+\paragraph{Key insights.}
+The kernel ODE perspective reveals two important insights. 
+First, the appearance of $|\rho|/(1-|\rho|)$ formula in our bound is due to the fact that $x/(1-x) = \exp( -c t) $ is a fundamental solution of the differential equation $x' = - c x(1-x).$ Second, it reveals the importance of positivity of coefficients in $\sum_{k=0}^\infty c_k^2\rho^k,$ which allowed us to arrive at a worst case pattern for the coefficients. This further highlights the value of algebraic properties of Hermite polynomials that cancelled out the cross term in the kernel map. 
+
+We can observe that the kernel ODE rate derived by analysis of kernel ODE is largely aligned exponential convergence of this term in Theorem~\ref{thm:global_attract_centered}. The slight discrepancy between the exponential rates between Theorem~\ref{thm:global_attract_centered} and the kernel ODE rate $\exp(-(1-\kappa'(0))$ is due to the discrete-continuous approximation. Despite this small discrepancy, the solution to kernel ODE can help us arrive at the right form for the solution. We can leverage the solution to kernel ODE to arrive at a bound for the discrete problem, namely using induction over steps.
 
 It might be worth noting what activations correspond to the slowest convergence in positive and negative cases. In the positive case, any weighted average of first and second Hermite polynomials corresponds to the worst case $\phi = \beta \he_1 + (1-\beta) \he_2,$ for some $\beta \in(0,1),$ while in the negative case a weighted average of first and third Hermite polynomials corresponds to the slowest convergence $\phi = \beta \he_1 + (1-\beta)\he_3. $  
 
-\begin{remark}
-   The kernel ODE perspective reveals two important insights. 
-   First, the appearance of $|\rho|/(1-|\rho|)$ formula in our bound is due to the fact that $x/(1-x) = \exp( -c t) $ is a fundamental solution of the differential equation $x' = - c x(1-x).$ Second, it reveals the importance of positivity of coefficients in $\sum_{k=0}^\infty c_k^2\rho^k,$ which allowed us to arrive at a worst case pattern for the coefficients. This further highlights the value of algebraic properties of Hermite polynomials that cancelled out the cross term in the kernel map. 
-\end{remark}
+
 
 % The main proof idea of this theorem is to show that upon applying the kernel map $\kappa$ to the covariance of pre-activations, the potential function $|\rho|/(1-|\rho|)$ decreases with rate $\alpha,$ and applying an induction over $\ell.$ Condition $\kappa(1)=\E \phi(X)^2 = 1$ ensures that activations are stable and do not explode or vanish, allowing us to apply the single step contraction inductively. The proof of the single step follows from the properties of Hermite polynomials and the orthogonality of the kernel map. The non-linearity condition is essential to have $\alpha<1,$ which rules out identity-like activations that do not change the value. The centered condition $\kappa(0)=\E \phi(X) = 0$ ensures that $\rho^*$ is a fixed point.
 
@@ -446,90 +467,113 @@ Given a non-linear activation function $\phi$ with kernel  $\kappa$ such that $\
 \end{enumerate}
 \end{theorem}
 
-\begin{remark}
+\paragraph{Implications.}  Let us take a step back and review the main take way from Theorem~\ref{thm:global_attract}. Omitting the constants and for sufficiently large depth $\ell,$ we have 
+\begin{align*}
+    \langle h^{\ell}(x), h^{\ell}(y)\rangle_\avg =  \begin{cases}
+         \rho^* + O(\alpha ^ \ell \langle x, y \rangle_\avg)  & \text{cases 1,2,4}\\
+         \rho^* + O \left(\langle x, y \rangle_\avg/\ell \right)   & \text{cases 3}.
+    \end{cases}
+\end{align*}
+
+Broadly speaking, we can think of three categories of bias:
+
+\begin{itemize}
+    \item Case 1 $\rho^*=0$: Implies that as the network becomes deeper, representations are pushed towards orthogonality, exponentially fast. We can think of this case as bias towards independence. 
+    \item Case 2 \& 3 $\rho^*=1$ Implies that as the network becomes deeper, representations become more similar or aligned (exponentially fast in Case 2, polynomially in case 3). Thus, we can think of this category as bias towards highly aligned representations. 
+    \item Case 4 $\rho^*\in (0,1)$: Implies that as network becomes deeper, the representations form angles between $0$ and $\pi/2.$ Thus, in this case, representations are neither completely aligned, nor completely independent. 
+\end{itemize}
+
+One alternative way of interpreting the results of Theorem~\ref{thm:global_attract} is that as we pass two inputs through non-linear activations, it ``forgets'' the similarity between inputs, and converges to a fixed point value that is independent of the inputs and only depends on the activation. Furthermore, the more non-linear the activation, the faster this convergence. If we take the view that the network ought to remember some similarity of the input to be able to start training, we can leverage Theorem~\ref{thm:global_attract} to strike a balance between depth and non-linearity of the activations. 
+
+
 One of the most striking results of this theorem is that for any non-linear activation, there is exactly one fixed point $\rho^*$ that is globally attractive, while other fixed points are neither globally or locally. 
 \thomas{Well, there can only be one globally attractive fixed point, can't there, by definition?} 
 \amir{Well, there is a possibility that there are multiple locally attracting fixed points, for example there are $\rho_1$ and $\rho_2$ and in the neighborhood of $\rho_1$, points are attracted towards $\rho_1$ and otherwise $\rho_2$. That is why the fact that any activation has exactly one globally attracting fixed points is quite interesting. Does it sound interesting now? }
 Furthermore, the fixed point is necessarily non-negative. This implies that for any MLP with non-linear activations, the covariance of pre-activations will converge towards a fixed point, which is always non-negative. 
 \thomas{Yeah, it seems that sign alternations can never reach a fixed-point, unless at $0$. Maybe this can just be excluded by a simple argument beforehand. I generally like to prune the space of possibilities early on. At any rate, a discussion of the special case of $\kappa$ taking negative values would probably be valuable.}
-\end{remark}
+ 
 
-\begin{remark}
-    Let us take a step back and review the main take way from Theorem~\ref{thm:global_attract}. Omitting the constants and for sufficiently large depth $\ell,$ we have 
-    \begin{align*}
-        \langle h^{\ell}(x), h^{\ell}(y)\rangle_\avg =  \begin{cases}
-             \rho^* + O(\alpha ^ \ell \langle x, y \rangle_\avg)  & \text{cases 1,2,4}\\
-             \rho^* + O \left(\langle x, y \rangle_\avg/\ell \right)   & \text{cases 3}.
-        \end{cases}
-    \end{align*}
-    Thus, an alternative way of viewing the statement of Theorem~\ref{thm:global_attract} is that, the bias of activations towards a global fixed points makes them forget about the similarity between two inputs exponentially in cases 1,2, and 4, and inversely in case 3.  
-\end{remark}
 
-% \begin{remark}
-% The assumptions laid out in the theorem are nearly tight. For example, the non-linearity assumption is necessary to rule out identity activation, where every point in $[-1,1]$ is a fixed point. Furthermore, considering odd activations such as $\phi(x) = x^3,$ and we can see that if $\rho_0\in\{-1,1\}$, the sequence will remain the same $\rho_\ell=\rho_0,$ and hence will not converge, which implies the condition that $\rho_0\in(-1,1)$ is necessary. 
-% \end{remark}
 
-% \begin{remark}
-% Note that the convergence rates are of exponential form $\|\rho_\ell-\rho^*\|= O(\alpha^\ell),$ where $\alpha<1$ if the activation is non-linear, with the exception of the case where $\kappa'(1)=1,$ where the rate is of the form $O(1/\ell).$ 
-% \end{remark}
+\section{Extension to normalization layers and residual connections}
 
-\section{Considering normalization and residual layers}
+In this section, we extend our analysis to MLPs that incorporate normalization layers and residual (skip) connections. We examine how these architectural modifications affect the kernel sequence $\{\rho_\ell\}$ and its convergence properties in the mean field regime.
 
-In this section, we will provide the statement and proof of two additional results considering normalization layers and skip connections. To state these results, let us consider some variants of the MLP with normalization layers and residual or skip connections. 
 
-We consider two types of normalization layers, with normalization layers before or after the activation: 
-\begin{align*}
-    & \text{Pre-act norm: } &&h^\ell = \phi\left(\text{norm}\left(W^\ell h^{\ell-1}\right)\right), \\
-    & \text{Post-act norm: } &&h^\ell = \text{norm}\left(\phi\left(W^\ell h^{\ell-1}\right)\right), 
-\end{align*}
-where $\text{norm}$ can be Layer Normalization (LN) or Root Mean Squared (RMS) normalization, defined as:
-\begin{align*}
-    &\text{LN}(z) = \frac{z - \bar{z}}{\sqrt{\frac1d \sum_{i=1}^d (z_i - \bar{z})^2}}, \\
-    &\text{RMS}(z) = \frac{z}{\sqrt{\frac1d \sum_{i=1}^d z_i^2}}.
-\end{align*}
+\subsection{Residual connections}
 
-For residual connections, we consider an update rule given by 
-\begin{align*}
-    h^\ell := \sqrt{1-r^2} \phi\left(\frac{1}{\sqrt{d}}W^\ell h^{\ell-1}\right) + r \frac{1}{\sqrt{d}}P^{\ell} h^{\ell-1}, 
-\end{align*}
-where $P^{\ell}\in R^{d\times d}$ are skip connections whose elements are drawn i.i.d.~from a zero mean unit variance distribution, and $r$ is the strength of the residual connections, the higher $r$ indicating stronger residual connections.   
+Residual connections, inspired by ResNets \citep{he2016deep}, help mitigate the vanishing gradient problem in deep networks by allowing gradients to flow directly through skip connections. 
+
+
+We analyze how these architectural changes affect the evolution of the kernel sequence in the mean field regime. Recall that, for the standard MLP without normalization or residual connections, the kernel sequence evolves according to the kernel map $\kappa(\rho)$ defined in Definition~\ref{def:kernel_map}.
+
+% \subsubsection{Theorem 1: Residual Connections}
 
 \begin{theorem}
-\label{thm:global_attract_res}
-Consider an MLP with non-linear activation $\phi$ that obeys $\E_{X\sim N(0,1)} \phi(X)^2 = 1,$  with kernel map $\kappa(\rho),$ and residual strength $r.$ Let $\rho_\ell$ denote the kernel sequence of this MLP. Then, the kernel map of the residual MLP is given by 
+\label{thm:residual_kernel_map}
+Let us assume the activation function $\phi$ satisfies $\E \phi(X)^2 = 1,\, X\sim N(0,1),$ and let $\kappa_\phi$ denote its kernel map. Consider the MLP with residual strength $t$ given by
 \begin{align*}
-    \nu(\rho) = (1-r^2) \kappa(\rho) + r^2 \rho.
+h^\ell = \sqrt{1 - r^2} \, \phi\left( \frac{1}{\sqrt{d}}W^\ell  h^{\ell-1} \right) + r \, \frac{1}{\sqrt{d}}P^\ell  h^{\ell-1},
 \end{align*}
-Furthermore, the new kernel map $\nu$ has the same globally contracting fixed point $\rho^*$ as the original kernel map $\kappa.$ Furthermore, if $r\in(0,1),$ the convergence case of $\nu$ remains in the same case  as $\kappa,$ but its convergence rate will be in each case. 
+where $W^\ell$ and $P^\ell$ are independent weight matrices of dimension $d \times d$ with entries drawn i.i.d.~from a zero-mean, unit-variance distribution, and $r \in [0, 1)$ modulates the strength of the residual connection. Then the residual kernel map is given by
+\begin{equation}
+\kappa_\res(\rho) = (1 - r^2) \kappa_\phi(\rho) + r^2 \rho.
+\end{equation}
+
+Furthermore, the fixed points of $\kappa_\res(\rho)$ are the same as those of $\kappa(\rho)$. For $r \in [0, 1)$, the convergence behavior remains in the same case as for $\kappa(\rho)$, but the convergence rate is affected by $r$.
 \end{theorem}
 
-Theorem~\ref{thm:global_attract_res} reveals an intriguing property of skip connections, in that they do not alter the fixed points of the network, however, they may change the convergence behavior. It is rather remarkable that in all cases, the convergence speed strictly decreases with the strength of residual connections. f
+\paragraph{Proof idea.} First observation is that due to independence of $W^\ell$ and $P^\ell,$ the cross terms in the joint kernel disappear. Thus, the residual connection acts as a linear combination of the transformed input and the input itself, leading to the modified kernel map $\kappa_\res(\rho)$. We can easily verify that any fixed point $\rho^*$ of $\kappa_\phi,$ is also a fixed point of $\kappa_\res,$ and because the identity map is neither attracting nor repulsive, the attracting qualities of $\rho^*$ will transfer from $\kappa_\phi$ to $\kappa_\res.$ Finally, 
 
-Finally, we can state and prove the globally attracting fixed points for MLPs with the normalization layers.
+\paragraph{Implications.} Theorem~\ref{thm:residual_kernel_map} reveals that residual connections modify the kernel map by blending the original kernel map with the identity function, weighted by the residual strength $r$. This adjustment affects the convergence rate to the fixed point but not the fixed point itself. Specifically, stronger residual connections (larger $r$) slow down the convergence, indicating a slower rate that the network ``forgets'' the similarity between inputs. 
 
-\begin{theorem}
-\label{thm:global_attract_norm}
-Consider $\phi$ that is square-integrable $\E \phi(X)^2 =1,$ with kernel map $\kappa(\rho).$ We have 
+% \subsection{Theorem 2: Normalization Layers}
+
+\subsection{Normalization layers}
+
+Normalization layers are widely used in deep learning to stabilize and accelerate training. In this section we focus on two common normalization layers:
 \begin{itemize}
-\item MLP with activation $\phi,$ pre-act RMS, post-act RMS, pre-act LN: The kernel sequence $\rho_\ell$ obeys by modified  kernel map $\kappa.$ 
-% \begin{align*}
-%     \nu(\rho):= \kappa(\rho)/\kappa(1).
-% \end{align*}
-\item MLP with post-act LN: The kernel sequence is defined by modified  kernel map $\nu$ 
-\begin{align*}
-    \nu(\rho) = \frac{\kappa(\rho)-\kappa(0)}{\kappa(1)-\kappa(0)}
-\end{align*}
+    \item \textit{Layer Normalization (LN)} \citep{ba2016layer}:
+  \begin{equation}
+  \operatorname{LN}(z) = \frac{z - \mu(z)}{\sigma(z)},
+  \end{equation}
+  where $\mu(z)$ is the mean, and $\sigma(z)$ is the standard deviation of the vector $z \in \mathbb{R}^d$.
+  \item \textit{Root Mean Square (RMS) Normalization}:
+  \begin{equation}
+  \operatorname{RN}(z) = \frac{z}{ \sqrt{ \frac{1}{d} \sum_{i=1}^d z_i^2 } }.
+  \end{equation}
 \end{itemize}
-% the following contraction holds in the mean field regime:
-% \begin{align}
-%     &\frac{|\rho_\ell|}{1-|\rho_\ell|} \le  \frac{|\rho_0|}{1-|\rho_0|} \alpha^{\ell}, && \alpha = \frac{\kappa(1)-\kappa(0)}{\kappa'(1)}.
-% \end{align}
-% where $\alpha$ is strictly less than one if the activation is non-linear.
+
+The following theorem characterizes the joint activation and normalization kernel, depending on the order between two and type of normalization layer used. 
+
+\begin{theorem}
+\label{thm:normalization_kernel_map}
+Let us assume $\phi$ satisfies $\E \phi(X)^2 = 1$ where $X\sim N(0,1).$ Consider an MLP layers 
+\begin{align*}
+    h^\ell = \psi\left( \frac{1}{\sqrt{d}}W^\ell h^{\ell-1}\right),
+    \; \psi \in \{\phi\circ RN,\phi\circ LN, RN\circ \phi\},
+\end{align*}
+where $\psi$ denotes the joint activation and normalization layers. 
+We have the following joint normalization and activation kernel:
+% Then, for each of the cases that $\psi \in \{RN\circ \phi, \phi\circ LN, \phi\circ RN\}$ the joint kernel map is given by $\kappa(\rho),$ and in the case that $\psi = LN\circ \phi,$ the joint kernel map is given by $(\kappa(\rho)-\kappa(0))/(1-\kappa(0)).$
+\begin{align*}
+    \kappa_\psi = \begin{cases}
+         \frac{\kappa_\phi-\kappa_\phi(0)}{1-\kappa_\phi(0)} & \psi=LN\circ \phi\\
+        \kappa_\phi & \text{otherwise},\\
+    \end{cases}
+\end{align*}
+where $\kappa_\phi$ denotes the kernel map of $\phi$. 
 \end{theorem}
 
-% \begin{remark}
-%     Theorem~\ref{thm:global_attract_norm} states that if an activation obeys $\E \phi(X)^2 =1,$ from the standpoint of kernel convergence, the 
-% \end{remark}
+\paragraph{Proof Sketch.} The main insight from the proof is that in the mean field regime, as the sample means and standard deviation converge to their population counterparts, normalization layers become a rescale and shift with constant values. This manifests itself most clearly when layer normalization is applied after activation, resulting in the modified kernel map that is centered.
+
+\paragraph{Implications.} Theorem~\ref{thm:normalization_kernel_map} indicates that normalization layers adjust the kernel map by scaling and, in some cases, shifting it. These modifications can alter the convergence properties of the kernel sequence:
+
+% - \textbf{Pre-Activation Normalization and Post-Activation RMS}: The kernel map is rescaled, which may accelerate or decelerate convergence depending on the shape of $\kappa(\rho)$.
+% - \textbf{Post-Activation LN}: The kernel map is both shifted and scaled, potentially leading to different fixed points or convergence behaviors.
+
+% Understanding these effects is crucial for designing neural network architectures that maintain desirable representational properties across layers.
+
 
 
 \section{Discussion}
@@ -652,24 +696,24 @@ where in the last line we used the orthonormality property $\E[\he_k(X) \he_l(X)
 \end{proof}
 
 
-\begin{proof}[Proof of Theorem~\ref{thm:global_attract_res}]
+\begin{proof}[Proof of Theorem~\ref{thm:residual_kernel_map}]
 First, we ought to prove that in the mean field regime, the kernel map is transformed according to the equation that is given. To do so, we can consider one layer update. Assume that $X,Y\sim N(0,1)$ with covariance $\E XY = \rho.$ Now, $(X',Y')$ is an independent copy of $(X,Y),$ with the same variance and covariance structure. This is due to the presence of skip connection weights $P.$ Now, defined the joint layer update 
 \begin{align*}
 \psi(X) &= \sqrt{1-r^2} \phi(X)  + r X',\\
 \psi(Y) &= \sqrt{1-r^2} \phi(Y')  + r Y',\\
-\implies \nu(\rho)&:= \E \psi(X)\psi(Y) \\
+\implies \kappa_\psi(\rho)&:= \E \psi(X)\psi(Y) \\
 &=  (1-r^2) \E \phi(X)\phi(Y) + r^2 \E X' Y' \\
     &= (1-r^2) \kappa(\rho) + r^2 \rho,
 \end{align*}
 where in the third line we use the independence assumption and the fact that $X'$ and $Y'$ have zero mean. 
 
-Observe that $\nu(\rho) = (1-r^2) \kappa(\rho),$ or $\nu'(\rho) = (1-r^2) \kappa'(\rho) + r^2.$ Now, let us consider the conditions for the four cases of Theorem~\ref{thm:global_attract}. The decision boundaries are if $\kappa(0)$ is positive or not, if $\kappa'(1)$ is above, equal to, or below $1.$ Now, note that for $r \in (0,1),$ strict positivity of $\nu(0) = (1-r^2) \kappa(0)$ remains the same as $\kappa(0).$ Furthermore, $\nu'(1)$ is a weighted average of $\kappa'(1)$ and $1.$ Thus, for all values $r\in(0,1),$ it holds $\nu'(1)$ is above, equal to, or below $1,$ if and only if $\kappa'(1)$ has the corresponding property.  Now, we can turn our focus on the convergence rates. For this, we can focus on $\alpha$ in each one of the four cases. 
+Observe that $\kappa_\psi(\rho) = (1-r^2) \kappa(\rho),$ or $\kappa_\psi'(\rho) = (1-r^2) \kappa'(\rho) + r^2.$ Now, let us consider the conditions for the four cases of Theorem~\ref{thm:global_attract}. The decision boundaries are if $\kappa(0)$ is positive or not, if $\kappa'(1)$ is above, equal to, or below $1.$ Now, note that for $r \in (0,1),$ strict positivity of $\kappa_\psi(0) = (1-r^2) \kappa(0)$ remains the same as $\kappa(0).$ Furthermore, $\kappa_\psi'(1)$ is a weighted average of $\kappa'(1)$ and $1.$ Thus, for all values $r\in(0,1),$ it holds $\kappa_\psi'(1)$ is above, equal to, or below $1,$ if and only if $\kappa'(1)$ has the corresponding property.  Now, we can turn our focus on the convergence rates. For this, we can focus on $\alpha$ in each one of the four cases. 
 \begin{itemize}
-    \item If $\kappa(0)=0$ then $\nu(0) = r^2 \kappa(0)$ and we have $\alpha = 1 / (2-\nu'(0)).$ Now, note that $\nu'(0) = (1-r^2)\kappa'(0) +  r^2$ is a weighted average between $\kappa'(0) < 1$ and $1,$ and thus, the larger the value of $r,$ the larger $\alpha$ would be, and the slower the convergence. 
-    \item If $\kappa(0)>0$ and $\kappa'(1)<1$ then we have $\nu(0)=0$ and $\nu'(1) < 1,$ and $\alpha = \nu'(1) = (1-r^2) \kappa'(1) + r^2.$ Thus, the larger the residual, the closer $\alpha$ becomes to $1,$ and the slower the convergence will be.  
-    \item If $\kappa(0)>0$ and $\kappa'(1)=1,$ then we have the same for $\nu,$ and 
+    \item If $\kappa(0)=0$ then $\kappa_\psi(0) = r^2 \kappa(0)$ and we have $\alpha = 1 / (2-\kappa_\psi'(0)).$ Now, note that $\kappa_\psi'(0) = (1-r^2)\kappa'(0) +  r^2$ is a weighted average between $\kappa'(0) < 1$ and $1,$ and thus, the larger the value of $r,$ the larger $\alpha$ would be, and the slower the convergence. 
+    \item If $\kappa(0)>0$ and $\kappa'(1)<1$ then we have $\kappa_\psi(0)=0$ and $\kappa_\psi'(1) < 1,$ and $\alpha = \kappa_\psi'(1) = (1-r^2) \kappa'(1) + r^2.$ Thus, the larger the residual, the closer $\alpha$ becomes to $1,$ and the slower the convergence will be.  
+    \item If $\kappa(0)>0$ and $\kappa'(1)=1,$ then we have the same for $\kappa_\psi,$ and 
     \begin{align*}
-        \alpha &= 1 - \nu(0) - \nu'(0)\\
+        \alpha &= 1 - \kappa_\psi(0) - \kappa_\psi'(0)\\
         &= 1 - (1-r^2) \kappa(0) - (1-r^2)\kappa'(0) - r^2\\
         &= (1-r^2 )( 1 - \kappa(0) - \kappa'(0))
     \end{align*}
@@ -678,12 +722,12 @@ Observe that $\nu(\rho) = (1-r^2) \kappa(\rho),$ or $\nu'(\rho) = (1-r^2) \kappa
         \alpha = (1-r^2) \sum_{k=2}^\infty c_k^2.
     \end{align*}
     We can now see that for larger $r,$ $\alpha $ will be smaller, which in this case implies a slower convergence. 
-    \item If $\kappa(0)>0$ and $\kappa'(1) > 1$ then same holds for $\nu,$ and the convergence rate $\alpha$ .
+    \item If $\kappa(0)>0$ and $\kappa'(1) > 1$ then same holds for $\kappa_\psi,$ and the convergence rate $\alpha$ .
 \end{itemize}
 
 \end{proof}
 
-\begin{proof}[Proof of Theorem~\ref{thm:global_attract_norm}]
+\begin{proof}[Proof of Theorem~\ref{thm:normalization_kernel_map}]
 The first part, i.e., the no normalization case, follows directly from Theorem~\ref{thm:global_attract}. The remainder of the proof follows from the following observation:
 
 Let us assume that $\phi$ is square-integrable $\E \phi(X)^2$. Then, the following hold in the mean field regime and $X\sim N(0,1).$ We have 
