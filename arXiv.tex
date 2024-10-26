@@ -1,24 +1,23 @@
-\documentclass[twoside]{article}
+\documentclass{article}
 
-\usepackage{aistats2025}
-
-% \usepackage{biblatex}
-\usepackage{natbib}
-\bibliographystyle{apalike}
-
+\usepackage{arxiv}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[hidelinks]{hyperref}
+\usepackage{url}
+\usepackage{booktabs}
+\usepackage{amsfonts}
+\usepackage{nicefrac}
+\usepackage{microtype}
 \usepackage{amsmath,amssymb,amsthm}
 \usepackage{graphicx}
 \usepackage{subcaption}
-\usepackage{booktabs}
 \usepackage{xcolor}
-\usepackage[hidelinks]{hyperref}
+\usepackage{natbib}
+\graphicspath{ {./figures/} }
 
-\newcommand{\avg}{\text{avg}}
-\newcommand{\res}{\text{res}}
-\newcommand{\E}{\mathbb{E}\,}
-\newcommand{\R}{\mathbb{R}}
-\newcommand{\he}{\mathrm{he}}
-\newcommand{\He}{\mathrm{He}}
+
+% Custom theorem environments
 \newtheorem{theorem}{Theorem}
 \newtheorem{lemma}{Lemma}
 \newtheorem{remark}{Remark}
@@ -26,27 +25,35 @@
 \newtheorem{proposition}{Proposition}
 \theoremstyle{definition}
 \newtheorem{definition}{Definition}
-% \newtheorem{corollary}[theorem]{Corollary}
-\newcommand{\thomas}[1]{{\color{blue}\textit{#1}}}
-\newcommand{\amir}[1]{{\color{cyan}\textit{#1}}}
-\graphicspath{ {./figures/} }
+% \newtheorem{corollary}[theorem]
 
+% Custom commands
+\newcommand{\avg}{\text{avg}}
+\newcommand{\res}{\text{res}}
+\newcommand{\E}{\mathbb{E}\,}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\he}{\mathrm{he}}
+\newcommand{\He}{\mathrm{He}}
+
+\title{Emergence of Globally Attracting Fixed Points in\\Deep Neural Networks With Nonlinear Activations}
+
+\author{
+  Amir Joudaki \\
+  ETH Zürich\\
+  \texttt{amir.joudaki@inf.ethz.ch} \\
+  \And
+  Thomas Hofmann \\
+  ETH Zürich\\
+  \texttt{thomas.hofmann@inf.ethz.ch }
+}
 
 \begin{document}
-
-% Title and authors
-\twocolumn[
-\aistatstitle{Emergence of Globally Attracting Fixed Points in\\ Deep Neural Networks With Nonlinear Activations}
-\aistatsauthor{Anonymous Author(s)}
-\aistatsaddress{Affiliation(s)} ]
+\maketitle
 
 \begin{abstract}
 Understanding how neural networks transform input data across layers is fundamental to unraveling their learning and generalization capabilities. Although prior work has used insights from kernel methods to study neural networks, a global analysis of how the similarity between hidden representations evolves across layers remains underexplored. In this paper, we introduce a theoretical framework for the evolution of the kernel sequence, which measures the similarity between the hidden representation for two different inputs. Operating under the mean-field regime, we show that the kernel sequence evolves deterministically via a kernel map, which only depends on the activation function. By expanding activation using Hermite polynomials and using their algebraic properties, we derive an explicit form for kernel map and fully characterize its fixed points. Our analysis reveals that for nonlinear activations, the kernel sequence converges globally to a unique fixed point, which can correspond to orthogonal or similar representations depending on the activation and network architecture. We further extend our results to networks with residual connections and normalization layers, demonstrating similar convergence behaviors. This work provides new insights into the implicit biases of deep neural networks and how architectural choices influence the evolution of representations across layers.
 \end{abstract}
 
-
-% \section{Fixed points and global convergence of deep representations}
-% \label{ch:isometry_activation}
 \section{Introduction}
 Deep neural networks have revolutionized various fields, from computer vision to natural language processing, due to their remarkable ability to learn complex patterns from data. Understanding the internal mechanisms that govern their learning and generalization capabilities remains a fundamental challenge. 
 
@@ -73,7 +80,7 @@ The study of deep neural networks through the lens of kernel methods and mean-fi
 
 The propagation of signals in deep networks has been studied in the works of \citet{schoenholz2016deep} and \citet{pennington2017resurrecting}. Previous studies have also explored the critical role of activation functions in maintaining signal propagation and stable gradient behavior in deep networks \citep{hayou2019impact}. These studies focused on understanding the conditions required for the stable propagation of information and the avoidance of signal amplification or attenuation. However, these analyses often concentrated on local behaviors or specific conditions, leaving a gap in understanding the global evolution of representations across layers. 
 
-Hermite polynomials have been used in probability theory and statistics, particularly in the context of Gaussian processes \citep{williams2006gaussian}. Although \citet{poole2016exponential} and \citet{daniely2016toward} have utilized polynomial expansions to analyze neural networks, they do not study global dynamics in neural networks, as presented in this paper. To the best of our knowledge, the only existing work that uses Hermite polynomials in the mean-field regime to study the global dynamics of the kernel is \citet{joudaki2023impact}. However, this study only covers centered activations, which fail to capture several striking global dynamics covered in this study.
+Hermite polynomials have been used in probability theory and statistics, particularly in the context of Gaussian processes \citep{williams2006gaussian}. Although~\citet{poole2016exponential} and \citet{daniely2016toward} have utilized polynomial expansions to analyze neural networks, they do not study global dynamics in neural networks, as presented in this paper. To the best of our knowledge, the only existing work that uses Hermite polynomials in the mean-field regime to study the global dynamics of the kernel is by~\citet{joudaki2023impact}. However, this study only covers centered activations, which fail to capture several striking global dynamics covered in this study.
 
 Our work extends these foundational studies by providing an explicit algebraic framework to analyze the global convergence of kernel sequences in deep networks with nonlinear activations. Using Hermite polynomial expansions, we offer a precise characterization of the kernel map and its fixed points, contributing new insights into the implicit biases of nonlinear activations.
 
@@ -93,7 +100,7 @@ The main goal of this paper is to analyze the sequence $\{\rho_\ell\}$ at random
 In the current setup, the sequence $\{\rho_\ell\}$ is a stochastic sequence or a Markov chain due to the random weights at each layer. However, we will show that under the mean-field regime, the sequence $\{\rho_\ell\}$ converges to a deterministic sequence, and we will analyze its properties.
 
 
-\section{The mean-field Regime}
+\section{The mean-field regime}
 
 In this section, we conduct a mean-field analysis of MLP to explore the neural kernel's fixed point behavior as the network depth increases. This approach allows us to gain insight into the global dynamics of neural networks, mainly how the similarity between two input samples evolves as they pass through successive network layers.
 Now, we can state the mean-field regime for the kernel sequence, stating that in this regime, the sequence becomes deterministic. 
@@ -104,7 +111,7 @@ As will be proven later, this sequence's deterministic transition follows a scal
     \label{def:kernel_map}
 Given two random variables $X, Y$ with covariance $\rho,$ and activation $\phi,$ define the \emph{kernel map } $\kappa$ as the mapping between the covariance of preactivation and the covariance of post-activations:
 \begin{align}
- \kappa(\rho):=\E\phi(X)\phi(Y), \; 
+ \kappa(\rho):=\E\phi(X)\phi(Y), && 
  \begin{pmatrix}X \\ Y\end{pmatrix}\sim \mathcal N\left(0, \begin{pmatrix} 1 & \rho \\ \rho & 1 \end{pmatrix}
  \right).
  \label{eq:kernel_map}
@@ -150,13 +157,13 @@ Although Hermite polynomials have been used in probability theory and statistics
 
 The crucial property of Hermite polynomials is their  orthogonality:
 \begin{align}\label{eq:hermite_orthogonality}
-\E\he_k(X)\he_l(X) = \delta_{kl}, \quad X \sim \mathcal N(0,1).
+\E\he_k(X)\he_l(X) = \delta_{kl}, && X \sim \mathcal N(0,1).
 \end{align}
 Scaling by $1/\sqrt{k!}$ ensures that polynomials form a \emph{orthonormal} basis. Based on this property, we can define:
 \begin{definition}\label{def:hermite_expansion}
 Given a function $\phi$, square-integrable with respect to the Gaussian measure. Its Hermite expansion is given by:
 \begin{align*}
-\phi = \sum_{k=0}^\infty c_k \he_k,\quad c_k = \E\phi(X) \he_k(X), \; X \sim \mathcal N (0,1)\,.
+&\phi = \sum_{k=0}^\infty c_k \he_k,&& c_k = \E\phi(X) \he_k(X), &&& X \sim \mathcal N (0,1)\,.
 \end{align*}
 Here, $c_k$ are called the Hermite coefficients of $\phi$. 
 \end{definition}
@@ -246,7 +253,7 @@ Given a nonlinear activation function $\phi$ with kernel  $\kappa$ such that $\k
     \end{align*}
     \item If $\kappa(0) > 0$, and $\kappa'(1)>1$ then the attracting fixed point is necessarily in the range $\rho^*\in(0,1)$, satisfying $\kappa'(\rho^*) < 1,$ for which we have  
     \begin{align*}
-    &|\rho_\ell-\rho^*| \le \frac{|\rho_0-\rho^*|}{1-|\rho_0|}\alpha^\ell \\ &\alpha = \max\left\{1-\kappa(0),\kappa'(\rho^*),\frac{1-\rho^*}{2-\kappa'(\rho^*)}\right\},
+    &|\rho_\ell-\rho^*| \le \frac{|\rho_0-\rho^*|}{1-|\rho_0|}\alpha^\ell  &&\alpha = \max\left\{1-\kappa(0),\kappa'(\rho^*),\frac{1-\rho^*}{2-\kappa'(\rho^*)}\right\},
     \end{align*}
     where $\alpha<1$.
     % \thomas{I have dropped the `if is nonlinear' and simply restricted to nonlinear activations from the start. Hope that is ok.}
@@ -328,9 +335,9 @@ In this case, the term corresponding to $k=1$ contributes positively to a faster
 where we used the fact that $\sum_{k=1}^\infty c_k^2 = 1.$ 
 Finally, we can solve this ODE 
 \begin{align*}
-    &\int \frac{d\rho}{\rho(1-\rho)} = - (1-c_1^2)\int t \\
+    \int \frac{d\rho}{\rho(1-\rho)} &= - (1-c_1^2)\int t \\
     % \implies \ln \frac{|\rho(t)|}{|1-\rho(t)|} = -t (1-c_1^2) + C\\
-    \implies &\frac{|\rho(t)|}{|1-\rho(t)|} = C \exp(-t(1-c_1^2)),
+    \implies \frac{|\rho(t)|}{|1-\rho(t)|} &= C \exp(-t(1-c_1^2)),
 \end{align*}
 where $C$ corresponds to the initial values. 
 % Solving for the constant and assuming that our continuous approximation of the discrete equation is accurate, we can state that approximately:
@@ -345,10 +352,10 @@ where $C$ corresponds to the initial values.
 \textit{Negative range.}
 Now, let us assume $\rho<0.$ In this case, only the odd terms in $\sum_{k=2}^\infty c_k^2 \rho^k$ contribute to a slowdown in convergence. Thus, the worst case occurs when all the weight of coefficients is concentrated in $k=3,$ leading to the kernel ODE:
 \begin{align*}
-&d\rho/dt = -(1-c_1^2)\rho + (1-c_1^2) \rho^3\\
+d\rho/dt &= -(1-c_1^2)\rho + (1-c_1^2) \rho^3\\
 % \implies    &\int \frac{d\rho}{\rho(1-\rho^2)} = -(1-c_1^2)\int dt \\
 % \implies \ln\left(\frac{|\rho(t)|}{\sqrt{1-\rho^2(t)}}\right) = - t (1-c_1^2) + B\\
-\implies &\frac{|\rho(t)|}{\sqrt{1-\rho^2(t)}} = C' \exp(-t(1-c_1^2)),
+\implies \frac{|\rho(t)|}{\sqrt{1-\rho^2(t)}} &= C' \exp(-t(1-c_1^2)),
 \end{align*}
 where $C'$ corresponds to the initial values. 
 
@@ -456,7 +463,7 @@ The following theorem characterizes the joint activation and normalization kerne
 Let us assume $\phi$ satisfies $\E \phi(X)^2 = 1$ where $X\sim N(0,1).$ Consider an MLP layers 
 \begin{align*}
     h^\ell = \psi\left( \frac{1}{\sqrt{d}}W^\ell h^{\ell-1}\right),
-    \; \psi \in \{\phi\circ RN,\phi\circ LN, RN\circ \phi\},
+    && \psi \in \{\phi\circ RN,\phi\circ LN, RN\circ \phi\},
 \end{align*}
 where $\psi$ denotes the joint activation and normalization layers. 
 We have the following joint normalization and activation kernel:
@@ -496,66 +503,11 @@ One of the central assumptions for our approach is operating in the mean-field, 
 % We hope that this work paves the way for further exploration into the mathematical foundations of deep learning and informs the design of more effective neural network architectures.
 
 % \bibliographystyle{plainnat}
+
+
+\bibliographystyle{plainnat}
 \bibliography{refs}
 
-
-\onecolumn
-
-\section*{Checklist}
-
-
-% %%% BEGIN INSTRUCTIONS %%%
-The checklist follows the references. For each question, choose your answer from the three possible options: Yes, No, Not Applicable. You are encouraged to include a justification to your answer, either by referencing the appropriate section of your paper or providing a brief inline description (1-2 sentences). 
-Please do not modify the questions. Note that the Checklist section does not count towards the page limit. Not including the checklist in the first submission won't result in desk rejection, although in such case we will ask you to upload it during the author response period and include it in camera ready (if accepted).
-
-\textbf{In your paper, please delete this instructions block and only keep the Checklist section heading above along with the questions/answers below.}
-% %%% END INSTRUCTIONS %%%
-
-
- \begin{enumerate}
-
-
- \item For all models and algorithms presented, check if you include:
- \begin{enumerate}
-   \item A clear description of the mathematical setting, assumptions, algorithm, and/or model. [Yes]
-   \item An analysis of the properties and complexity (time, space, sample size) of any algorithm. [Not Applicable]
-   \item (Optional) Anonymized source code, with specification of all dependencies, including external libraries. [Yes]
- \end{enumerate}
-
-
- \item For any theoretical claim, check if you include:
- \begin{enumerate}
-   \item Statements of the full set of assumptions of all theoretical results. [Yes]
-   \item Complete proofs of all theoretical results. [Yes]
-   \item Clear explanations of any assumptions. [Yes]     
- \end{enumerate}
-
-
- \item For all figures and tables that present empirical results, check if you include:
- \begin{enumerate}
-   \item The code, data, and instructions needed to reproduce the main experimental results (either in the supplemental material or as a URL). [Yes]
-   \item All the training details (e.g., data splits, hyperparameters, how they were chosen). [Not Applicable]
-         \item A clear definition of the specific measure or statistics and error bars (e.g., with respect to the random seed after running experiments multiple times). [Not Applicable]
-         \item A description of the computing infrastructure used. (e.g., type of GPUs, internal cluster, or cloud provider). [Not Applicable]
- \end{enumerate}
-
- \item If you are using existing assets (e.g., code, data, models) or curating/releasing new assets, check if you include:
- \begin{enumerate}
-   \item Citations of the creator If your work uses existing assets. [Not Applicable]
-   \item The license information of the assets, if applicable. [Not Applicable]
-   \item New assets either in the supplemental material or as a URL, if applicable. [Not Applicable]
-   \item Information about consent from data providers/curators. [Not Applicable]
-   \item Discussion of sensible content if applicable, e.g., personally identifiable information or offensive content. [Not Applicable]
- \end{enumerate}
-
- \item If you used crowdsourcing or conducted research with human subjects, check if you include:
- \begin{enumerate}
-   \item The full text of instructions given to participants and screenshots. [Not Applicable]
-   \item Descriptions of potential participant risks, with links to Institutional Review Board (IRB) approvals if applicable. [Not Applicable]
-   \item The estimated hourly wage paid to participants and the total amount spent on participant compensation. [Not Applicable]
- \end{enumerate}
-
- \end{enumerate}
 
 \appendix
 \renewcommand{\thetable}{S.\arabic{table}}
@@ -914,9 +866,18 @@ Recall the assumption that $\phi$ obeys $\E \phi(X)^2 = 1,\, X\sim N(0,1). $ Let
     \item $\psi = \phi\circ RN$ and $\psi = \phi\circ LN$: Because each element of $Z$ has zero mean and unit variance, in the mean field regime, the sample mean and variances will be equal to the their population counterparts, implying that $LN(Z) = Z$ and $RN(Z) = Z.$ In other words, they act as identity. Thus, in both cases, in the mean-field regime we have $\psi = \phi.$ Thus, the kernel map also remains the same. 
     \item $\psi = RN \circ \phi$: In this case, because of the assumption on activation for Gaussian preactivations we have $\E \phi(Z_i)^2 = 1,$ for all $i=1,\dots, d.$ Because elements of $Z$ are i.i.d., by law of large numbers $\frac1d\|\phi(Z)\|^2$ will converge to its expected value $1.$ Thus, again, the normalization step in RN becomes ineffective, implying that in the mean-field we have $\psi = \phi.$ Thus, the kernel map also remains the same. 
     \item $\psi = LN \circ \phi$: By definition of kernel map of activation, we have  
-    $$\E \phi(Z_i) = \sqrt{\kappa_\phi(0)}, \quad \mathrm{Var}(Z_i) = \E \phi(Z_i)^2 - (\E \phi(Z_i))^2 = \kappa_\phi(1) - \kappa_\phi(0).$$ 
+    \begin{align*}
+        \E \phi(Z_i) &= \sqrt{\kappa_\phi(0)}, 
+       && \mathrm{Var}(Z_i) = \E \phi(Z_i)^2 - (\E \phi(Z_i))^2 =  1- \kappa_\phi(0)
+    \end{align*}
     Thus, again by law of large numbers we will have 
-    $$\psi = (\phi - \sqrt{\kappa_\phi(0)})/\sqrt{\kappa_\phi(1) - \kappa_\phi(0)}.$$ Now, if we look at the kernel map of this affine transformation, we have $$\kappa_\psi(\rho) = (\kappa_\phi(\rho) - \kappa_\phi(0))/(\kappa_\phi(1)-\kappa_\phi(0)),$$
+    $$\psi = (\phi - \sqrt{\kappa_\phi(0)})/\sqrt{1 - \kappa_\phi(0)}.$$ Now, if we look at the kernel map of this affine transformation, we have 
+    \begin{align*}
+    \kappa_\psi(\rho) &= \E \psi(X)\psi(Y)\\
+    &= \E \frac{(\phi(X)-\sqrt{\kappa_\phi(0)} )}{\sqrt{\kappa(1)-\kappa(0)}}\frac{(\phi(Y)-\sqrt{\kappa_\phi(0)} )}{\sqrt{1-\kappa_\phi(0)}}\\
+    &= \frac{\E \phi(X)\phi(Y) - \kappa_\phi(0)}{1-\kappa_\phi(0)}\\
+    &= \frac{\kappa_\phi(\rho)-\kappa_\phi(0)}{1-\kappa_\phi(0)}
+    \end{align*}
     which concludes the proof. 
 \end{itemize}
 % Let us assume that $\phi$ is square-integrable w.r.t Gaussian measure $\E \phi(X)^2 < \infty, $ where $X\sim N(0,1).$  Then, the following holds in the mean-field regime We have 
@@ -1141,5 +1102,6 @@ The third and fourth columns show the kernel sequence (empirical: blue, theory: 
 % %     \caption{\small Same as Figure~\ref{fig:validation_plots} for some commonly used activations. Note that because the raw activations do not necessarily obey $\E \phi^2(X)=1,$ we have to scale by some constant $C$ to make the activations obey the conditions of the theorem.}
 % %     \label{fig:validation_plots_real_activations}
 % % \end{figure*}
+
 
 \end{document}
