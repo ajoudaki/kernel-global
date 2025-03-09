@@ -153,7 +153,7 @@ Hermite polynomials possess completeness and orthogonality under the Gaussian me
 \begin{definition}
 Normalized Hermite polynomials $\he_k(x)$ are defined as follows
 \begin{align*}
-&\he_k(x) :=\frac{1}{\sqrt{k!}}(-1)^k e^{-\frac{x^2}{2}} \frac{d^k}{dx^k} e^{-\frac{x^2}{2}}.
+&\he_k(x) :=\frac{1}{\sqrt{k!}}(-1)^k e^{\frac{x^2}{2}} \frac{d^k}{dx^k} e^{-\frac{x^2}{2}}.
 \end{align*}
 \end{definition}
 
@@ -189,7 +189,7 @@ For standard-normal random variables $X,Y$ with covariance $\rho$ it holds
 
 This lemma states that given two Gaussian random variables $X, Y$ with covariance $\rho$, the expectation of the product of Hermite polynomials is zero unless the indices are equal (see explanations in Section~\ref{sec:proofs} for proof).
 
-The lemma~\ref{lem:mehler_kernel} is crucial for our theory. Based on this lemma, we can express the kernel map $\kappa$ in terms of the Hermite coefficients, showing a particular structure of the kernel map.
+The Lemma~\ref{lem:mehler_kernel} is crucial for our theory. Based on this lemma, we can express the kernel map $\kappa$ in terms of the Hermite coefficients, showing a particular structure of the kernel map.
 
 \begin{corollary}
     \label{cor:hermite_covariance}
@@ -299,7 +299,7 @@ Let $\epsilon > 0$ be the some numerical precision, and let $\phi$ be an activat
 Approximately, $\ln(1/\epsilon)$ represents the number of bits of numerical precision available in floating-point representations. For example for \texttt{float32} numbers, $\ln(1/\epsilon)$ is approximately $\ln(1/2^{-128}) \approx 88$. Therefore, when the network depth $\ell$ exceeds threshold $88/\ln(1/\kappa'(1))$, the representations of any two inputs will become numerically indistinguishable from one another. This effect propagates through subsequent layers, potentially making training ineffective or impossible. Notably, ReLU and sigmoid satisfy the conditions of this corollary, implying that this phenomenon can occur in networks utilizing these activations. Previous works on rank collapse~\citep{daneshmand2020batch,noci2022signal} and covariance degeneracy~\citep{li2022neural} have observed and studied this phenomenon in various settings. However, the explicit and closed-form relationship presented in Corollary~\ref{cor:convergence_precision} provides a novel and precise quantification of this effect.
 
 One of the most striking results of this theorem is that for any nonlinear activation, there is exactly one fixed point $\rho^*$ that is globally attractive, while other fixed points are not stable. Furthermore, the fixed point is necessarily non-negative. This implies that for any MLP with nonlinear activations, the covariance of preactivations will converge towards a fixed point, which is always non-negative. 
-It turns out that there is a geometric reason why no globally attracting negative fixed point could exist (See remark~\ref{rem:no_negative_geometric}).
+It turns out that there is a geometric reason why no globally attracting negative fixed point could exist (See Remark~\ref{rem:no_negative_geometric}).
 
 % Note that in some of the cases of Theorem~\ref{thm:global_attract}, we showed contraction under the potential $|\rho|/(1-|\rho|)$ Because $|\rho|/(1-|\rho|)$ is a monotonically increasing with $|\rho|$, the contraction of $|\rho_\ell|/(1-|\rho_\ell|)$ implies contraction of $|\rho_\ell|$ towards zero. 
 Theorem~\ref{thm:global_attract} has several aspects that may seem counterintuitive. For instance, case 1 demonstrates that a quantity $|\rho|/(1-|\rho|)$ decays exponentially as depth increases. To gain a better understanding of the theories behind Theorem~\ref{thm:global_attract}, we can cast our layer-wise kernel dynamics as a continuous-time dynamical system, which is discussed next. For a detailed proof of Theorem~\ref{thm:global_attract}, please refer to Section~\ref{sec:proofs}.
@@ -432,8 +432,8 @@ Furthermore, we have: 1) fixed points of $\kappa_\res(\rho)$ are the same as tho
 \end{proposition}
 
 
-\paragraph{Implications.} Proposition~\ref{prop:residual_kernel_map} reveals that residual connections modify the kernel map by blending the original kernel map with the identity function, weighted by the residual $r$. This adjustment has several interesting implications. Our analysis here gives a quantitative way of balancing depth with the nonlinearity of activations. For example, \citet{li2022neural} show as we `shape' the negative slope of a leaky ReLU towards identity, it will prevent degenerate covariance in depth. In light of proposition~\ref{prop:residual_kernel_map} and corollary~\ref{cor:convergence_precision}, we can write leaky ReLU as a linear combination of ReLU and identity and conclude that as residual strength increases ($r\to 1$), the convergence rate becomes slower and thus degeneracy happens at deeper layers, which aligns with the prior study. 
-Another interesting byproduct of proposition~\ref{prop:residual_kernel_map} is that it shows that when $r\to 1$ (highly strong residuals), the kernel ODE becomes an exact model for kernel dynamics (See remark~\ref{rem:residual_ODE}).
+\paragraph{Implications.} Proposition~\ref{prop:residual_kernel_map} reveals that residual connections modify the kernel map by blending the original kernel map with the identity function, weighted by the residual $r$. This adjustment has several interesting implications. Our analysis here gives a quantitative way of balancing depth with the nonlinearity of activations. For example, \citet{li2022neural} show as we `shape' the negative slope of a leaky ReLU towards identity, it will prevent degenerate covariance in depth. In light of Proposition~\ref{prop:residual_kernel_map} and corollary~\ref{cor:convergence_precision}, we can write leaky ReLU as a linear combination of ReLU and identity and conclude that as residual strength increases ($r\to 1$), the convergence rate becomes slower and thus degeneracy happens at deeper layers, which aligns with the prior study. 
+Another interesting byproduct of Proposition~\ref{prop:residual_kernel_map} is that it shows that when $r\to 1$ (highly strong residuals), the kernel ODE becomes an exact model for kernel dynamics (See Remark~\ref{rem:residual_ODE}).
 
 
 
@@ -1076,7 +1076,7 @@ The third and fourth columns show the kernel sequence (empirical: blue, theory: 
 % elu &0.80 &0.97 &0.60 &0.60 &0.04 &0.90 &1.04 &0.97 &case 4/exp.\\ 
 % \bottomrule
 % \end{tabular}
-% \caption{Activation functions: a review of most commonly used activations (normalized, see remark~\ref{rem:act-normalization}), according to Theorem~\ref{thm:global_attract}. In the last column, we have noted the case of convergence according to Theorem~\ref{thm:global_attract}, as well as the speed of convergence (exp: exponential, poly: polynomial) in depth. Note that only the exponential activation has polynomial convergence.}
+% \caption{Activation functions: a review of most commonly used activations (normalized, see Remark~\ref{rem:act-normalization}), according to Theorem~\ref{thm:global_attract}. In the last column, we have noted the case of convergence according to Theorem~\ref{thm:global_attract}, as well as the speed of convergence (exp: exponential, poly: polynomial) in depth. Note that only the exponential activation has polynomial convergence.}
 % \label{tab:activation_stats}
 % \end{table}
 
@@ -1084,7 +1084,7 @@ The third and fourth columns show the kernel sequence (empirical: blue, theory: 
 % \subsection{Figures \ref{fig:validation_plots} and \ref{fig:validation_plots2}}
 % Each row of the figures shows one activation and each column is dedicated to the following (from left to right). 
 
-% \paragraph{Activation}. The First column shows the activation function itself, up to some scaling (see remark~\ref{rem:act-normalization}). 
+% \paragraph{Activation}. The First column shows the activation function itself, up to some scaling (see Remark~\ref{rem:act-normalization}). 
 
 % \paragraph{Kernel map and fixed point iterations} The second column shows kernel map $\kappa$ of each activation is plotted (blue) as defined in Definition~\ref{def:kernel_map}, and the fixed iterations over this kernel (red), as defined by pairs of points 
 % $$
