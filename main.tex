@@ -93,7 +93,7 @@ The main goal of this paper is to analyze the sequence $\{\rho_\ell\}$ at random
 In the current setup, the sequence $\{\rho_\ell\}$ is a stochastic sequence or a Markov chain due to the random weights at each layer. However, we will show that under the mean-field regime, the sequence $\{\rho_\ell\}$ converges to a deterministic sequence, and we will analyze its properties.
 
 
-\section{The mean-field Regime}
+\section{The mean-field regime}
 
 In this section, we conduct a mean-field analysis of MLP to explore the neural kernel's fixed point behavior as the network depth increases. This approach allows us to gain insight into the global dynamics of neural networks, mainly how the similarity between two input samples evolves as they pass through successive network layers.
 Now, we can state the mean-field regime for the kernel sequence, stating that in this regime, the sequence becomes deterministic. 
@@ -131,7 +131,7 @@ Historically, conditions similar to $\E \phi(X)^2=1$ have been used to prevent q
 
 An interesting observation is that kernel dynamics is governed by kernel map $\kappa,$ defined on the basis of Gaussian preactivation, even if the weights are not Gaussian matrices. The main insight for this equivalence is that as long as elements are drawn i.i.d.~from a zero mean unit variance distribution, we can apply the Central Limit Theorem (CLT) to conclude that preactivations follow the Gaussian distribution. This simple yet elegant observation gives us a powerful analytic tool to study kernel dynamics by leveraging algebraic properties for Gaussian preactivations; we will automatically get the same results for a wide class of distributions. 
 
-The proposition~\ref{prop:mean_field_kernel_general} tells us that the kernel sequence $\{\rho_\ell\}$ is precisely given by $\rho,\kappa(\rho),\kappa(\kappa(\rho)),\dots\,.$ Thus, we can analyze its convergence by studying the fixed points of the kernel map $\kappa,$
+The Proposition~\ref{prop:mean_field_kernel_general} tells us that the kernel sequence $\{\rho_\ell\}$ is precisely given by $\rho,\kappa(\rho),\kappa(\kappa(\rho)),\dots\,.$ Thus, we can analyze its convergence by studying the fixed points of the kernel map $\kappa,$
 which are the values of $\rho^*$ that satisfy $\kappa(\rho^*) = \rho^*.$  With the assumption that $\E \phi(X)^2=1,$ the kernel map $\kappa$ is a mapping between $[-1,-1]$ to itself. Thus, Brower's fixed point theorem implies that the kernel map $\kappa$ has at least one fixed point $\rho^*.$ However, as we will show, there is potentially more than one fixed point, and it will be interesting to understand which ones are locally or globally attractive. 
 
 
@@ -176,7 +176,7 @@ For standard-normal random variables $X,Y$ with covariance $\rho$ it holds
 \end{lemma}
 
 This lemma states that given two Gaussian random variables $X, Y$ with covariance $\rho$, the expectation of the product of Hermite polynomials is zero unless the indices are equal (see Section~\ref{sec:proofs} for proof).
-The lemma~\ref{lem:mehler_kernel} is crucial for our theory. Based on this lemma, we can express the kernel map $\kappa$ in terms of the Hermite coefficients, showing a particular structure of the kernel map.
+The Lemma~\ref{lem:mehler_kernel} is crucial for our theory. Based on this lemma, we can express the kernel map $\kappa$ in terms of the Hermite coefficients, showing a particular structure of the kernel map.
 
 \begin{corollary}
     \label{cor:hermite_covariance}
@@ -272,7 +272,7 @@ Broadly speaking, we can think of three categories of bias:
     \item \textit{Strong similarity $\rho^*=1$}: Implies that as the network becomes deeper, representations become more similar or aligned, as indicated by inner products converging to one, exponentially fast in case 2, polynomially in case 3. 
 \end{itemize}
 
-See section~\ref{sec:experiments} for a review of commonly used activations, and their biases according to Theorem~\ref{thm:global_attract}.
+See Section~\ref{sec:experiments} for a review of commonly used activations, and their biases according to Theorem~\ref{thm:global_attract}.
 
 The bias of activation and normalization layers has been extensively studied in the literature. For example, \citet{daneshmand2021batch} show that batch normalization with linear activations makes representations more orthogonal, relying on a technical assumption that is left unproven (see assumption $\mathcal{A}_1$). Similarly, \citet{joudaki2023bridging} extend this to odd activations yet introduce another technical assumption about the ergodicity of the chain, which is hard to verify or prove (see Assumption 1). \citet{yang2019meanfield} prove the global convergence of the Gram matrix of a network with linear activation and batch normalization (see Corollary F.3) toward a fixed point. However, the authors explain that because they cannot establish such a global convergence for general activations (see page 20, under the paragraph titled Main Technical Results), they resort to finding locally stable fixed points, meaning that if preactivations have such a Gram matrix structure and they are perturbed infinitesimally. Recent studies have also examined the evolution of covariance structures in deep and wide networks using stochastic differential equations \citep{li2022neural}, which is similar to kernel dynamics and kernel ODE introduced here. However, the covariance SDE approach does not theoretically show the global convergence towards these solutions. Finally, \citet{joudaki2023impact} establish a global bias towards orthogonality for centered activations (see Theorem A2), which aligns with case 1 of Theorem~\ref{thm:global_attract}, and to extend to other activations, they add layer normalization after the activation to make it centered. In contrast, Theorem~\ref{thm:global_attract} covers all existing activations. 
 
@@ -373,7 +373,7 @@ This further highlights the value of algebraic properties of Hermite polynomials
 We can observe that the kernel ODE rate derived by analysis of kernel ODE is largely aligned with the exponential convergence of this term in Theorem~\ref{thm:global_attract}. The slight discrepancy between the exponential rates between Theorem~\ref{thm:global_attract} and the kernel ODE rate $\exp(-(1-\kappa'(0))$ is due to the discrete-continuous approximation. Despite this small discrepancy, the solution to kernel ODE can help us arrive at the right form for the solution. We can leverage the solution to kernel ODE to arrive at a bound for the discrete problem, namely using induction over steps.
 
 % It might be worth that the slowest convergence in the positive range when $\phi  = c_1 \he_1 + \sqrt{1-c_1^2}\he_2,$ and in the negative range when $\phi  = c_1 \he_1 + \sqrt{1-c_1^2}\he_3.$ 
-Since Theorem~\ref{thm:global_attract} only provides an upper bound and not a lower bound for convergence, one natural question is: how big is the gap between this worst case and the exact ODE convergence rates? We can construct activations where the convergence is substantially faster, such as doubly exponential convergence (see Corollary~\ref{cor:double_exp}). However, for all practically used activations, the gap between our bound and the real convergence is enough (See section~\ref{sec:experiments}).
+Since Theorem~\ref{thm:global_attract} only provides an upper bound and not a lower bound for convergence, one natural question is: how big is the gap between this worst case and the exact ODE convergence rates? We can construct activations where the convergence is substantially faster, such as doubly exponential convergence (see Corollary~\ref{cor:double_exp}). However, for all practically used activations, the gap between our bound and the real convergence is enough (See Section~\ref{sec:experiments}).
 
 
 
@@ -421,12 +421,8 @@ Furthermore, we have: 1) fixed points of $\kappa_\res(\rho)$ are the same as tho
 \end{proposition}
 
 
-
-% \paragraph{Proof insight.} First observation is that due to independence of $W^\ell$ and $P^\ell,$ the cross terms in the joint kernel disappear. Thus, the residual connection acts as a linear combination of the transformed input and the input itself, leading to the modified kernel map $\kappa_\res(\rho)$. 
-% Furthermore, Because the identity map is neither attractive nor repulsive, the attracting qualities of $\rho^*$ will transfer from $\kappa_\phi$ to $\kappa_\res.$ See section~\ref{sec:proofs} for detailed proof.
-
-\paragraph{Implications.} Proposition~\ref{prop:residual_kernel_map} reveals that residual connections modify the kernel map by blending the original kernel map with the identity function, weighted by the residual $r$. This adjustment has several interesting implications. Our analysis here gives a quantitative way of balancing depth with the nonlinearity of activations. For example, \citet{li2022neural} show as we `shape' the negative slope of a leaky ReLU towards identity, it will prevent degenerate covariance in depth. In light of proposition~\ref{prop:residual_kernel_map} and corollary~\ref{cor:convergence_precision}, we can write leaky ReLU as a linear combination of ReLU and identity and conclude that as residual strength increases ($r\to 1$), the convergence rate becomes slower and thus degeneracy happens at deeper layers, which aligns with the prior study. 
-Another interesting byproduct of proposition~\ref{prop:residual_kernel_map} is that it shows that when $r\to 1$ (highly strong residuals), the kernel ODE becomes an exact model for kernel dynamics (See remark~\ref{rem:residual_ODE}).
+\paragraph{Implications.} Proposition~\ref{prop:residual_kernel_map} reveals that residual connections modify the kernel map by blending the original kernel map with the identity function, weighted by the residual $r$. This adjustment has several interesting implications. Our analysis here gives a quantitative way of balancing depth with the nonlinearity of activations. For example, \citet{li2022neural} show as we `shape' the negative slope of a leaky ReLU towards identity, it will prevent degenerate covariance in depth. In light of Proposition~\ref{prop:residual_kernel_map} and Corollary~\ref{cor:convergence_precision}, we can write leaky ReLU as a linear combination of ReLU and identity and conclude that as residual strength increases ($r\to 1$), the convergence rate becomes slower and thus degeneracy happens at deeper layers, which aligns with the prior study. 
+Another interesting byproduct of Proposition~\ref{prop:residual_kernel_map} is that it shows that when $r\to 1$ (highly strong residuals), the kernel ODE becomes an exact model for kernel dynamics (See remark~\ref{rem:residual_ODE}).
 
 
 
@@ -598,7 +594,7 @@ Then, the sequence contracts towards the fixed point at zero $\rho^*=0$ with rat
 
 
 
-% \begin{proof}[Proof of Mehler's lemma~\ref{lem:mehler_kernel}]
+% \begin{proof}[Proof of Mehler's Lemma~\ref{lem:mehler_kernel}]
 % The property can be deduced from Mehler's kernel (cf.~\citep{mehler1866ueber}), which states that 
 % \begin{align*}
 % &\frac{1}{\sqrt{1-\rho^2}}\exp\left(-\frac{\rho^2(x^2+y^2)-2xy\rho}{2(1-\rho^2)}\right) \\
