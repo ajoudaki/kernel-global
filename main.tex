@@ -604,87 +604,6 @@ Then, the sequence contracts towards the fixed point at zero $\rho^*=0$ with rat
 \end{theorem}
 
 
-
-% \begin{proof}[Proof of Mehler's Lemma~\ref{lem:mehler_kernel}]
-% The property can be deduced from Mehler's kernel (cf.~\citep{mehler1866ueber}), which states that 
-% \begin{align*}
-% &\frac{1}{\sqrt{1-\rho^2}}\exp\left(-\frac{\rho^2(x^2+y^2)-2xy\rho}{2(1-\rho^2)}\right) \\
-% &= \sum_{m=0}^\infty \he_m(x)\he_m(y),
-% \end{align*}
-% where the $m!$ factor difference is due to the definition of Hermite polynomials with an additional $1/\sqrt{m!}$ compared to the one used in Mehler's kernel. 
-% Observe that the left-hand side is equal to $p(x,y)/p(x)p(y)$, where $p(x,y)$ is the joint PDF of $(X, Y)$, and $p(x),p(y)$ are marginal PDF of $X$ and $Y$ respectively. Therefore, we can take the expectation using the expansion 
-% \begin{align*}
-% \E_{X,Y}&\left[ \he_k(X) \he_l(Y)\right] \\
-% &= \int \he_k(x)\he_l(y)p(x,y)dx dy \\
-% &=  \sum_{m=0}^\infty \rho^m\int \he_k(x)\he_l(y) \he_m(x)\he_m(y) dp(x)dp(y)\\
-% &= \sum_{m=0}^\infty \rho^m\E_{X} \left[\he_k(X)\he_m(X)\right]\E_{Y} \left[\he_l(Y)\he_m(Y)\right] \\
-% &= \rho^k \delta_{kl} 
-% \end{align*}
-% where in the last line we used the orthonormality property $\E[\he_k(X) \he_l(X)]=\delta_{kl}$. 
-% \end{proof}
-% \thomas{I have a suggestion for notation: why don't we use inner product notation for covariance, i.e.$\langle X,Y \rangle = \E[XY]$. This may simplify the notation and avoid clutter. Orthonormality of Hermite polynomials just reads $\langle \he_k, \he_l \rangle = \delta_{kl}$}. \thomas{Another notational shorthand would be to define the bivariate $\mathcal N(\rho)$ as it is needed so often.}
-
-
-
-
-% \begin{proof}[Proof of Theorem~\ref{thm:global_attract_centered}]
-%  The main technical part of the proof is to prove that:
-%     \begin{align*}
-%         \Psi(\kappa(\rho)) \le \alpha \Psi(\rho), \quad \text{where} \quad \Psi(\rho) = \frac{|\rho|}{1-|\rho|}.
-%     \end{align*}
-% Based on the given assumptions we have $c_0^2 = \kappa(0) = 0$ and based on the assumption $\kappa(1)=1$ we have $\kappa(1)=\sum_{k=1}^\infty c_k^2 = 1.$  
-% % \thomas{It's confusing as you had made $\kappa(1)=1$ an assumption. I guess it rather follows from energy normalization? Please clarify. If it follows from the $\E\phi^2=1$ condition, then we should use that condition in the theorem.}
-    
-%  First, we will consider positive $\rho\in[0,1),$ for which we have
-%     \begin{align*}
-%  \frac{\Psi(\kappa(\rho))}{\Psi(\rho)}&=\left(\frac{\kappa(\rho)}{1-\kappa(\rho)}\right)  \left(\frac{\rho}{1-\rho}\right)^{-1}\\  
-%         &= \frac{\rho^{-1}\sum_{k=1}^\infty c_k^2 \rho^{k} }{(1-\rho)^{-1}\sum_{k=1}^\infty c_k^2 (1-\rho^{k})} \\
-%         &= \frac{\sum_{k=1}^\infty c_k^2 \rho^{k-1}}{\sum_{k=1}^\infty c_k^2 \left(\frac{1-\rho^{k}}{1-\rho}\right)}\\
-%         &= \frac{\sum_{k=1}^\infty c_k^2 \rho^{k-1}}{\sum_{k=1}^\infty c_k^2 \left(\sum_{i=0}^{k-1}\rho^{i}\right)}\\
-%         &\le \frac{\sum_{k=1}^\infty c_k^2\rho^{k-1} }{\sum_{k=1}^\infty c_k^2 \rho^{k-1} + \sum_{k=2}^\infty c_k^2}\\
-%         &\le \max_{\rho\in[0,1]} \frac{\sum_{k=1}^\infty c_k^2\rho^{k-1} }{\sum_{k=1}^\infty c_k^2 \rho^{k-1} + \sum_{k=2}^\infty c_k^2}\\
-%         &= \frac{\sum_{k=1}^\infty c_k^2}{2\sum_{k=1}^\infty c_k^2 -c_1^2 } \\
-%         &=\frac{1}{2-\kappa'(0)} =: \alpha.
-%     \end{align*}
-% % \thomas{I am unsure about the last equality. I see that $\kappa'(0)=c_1^2$. But the infinite sum does not start at $k=0$. So $\sum_{k=1}^\infty c_k^2 = \sum_{k=0}^\infty c_k^2-c_0^2 = 1 - c_0^2$. I don't want to get hung up on this, but maybe you can check.}
-
-% % \amir{The reason is that from the assumption we get $\kappa(0) = c_0^2  = 0. $Is it not clear enough? }
-
-% % \thomas{Yes, OK it follows from $\phi$ being centered.} 
-
-%  Now, we can use the fact that the norm of the sum of values is bounded by the sum of their norms to argue that 
-%  % \thomas{Shouldn't $k$ start at $k=0$?}
-% \begin{align*}
-%  |\kappa(\rho)|=|\sum_{k=1}^\infty c_k^2 \rho^k | &\le \sum_{k=1}^\infty c_k^2 |\rho|^k 
-%  = \kappa(|\rho|)
-% \end{align*}
-% % \thomas{I have a naive question. If $\rho > 0$ then this inequality is exact as all terms are positive. It seems that a possible complication only comes from $\rho<0$, where the sign of $\rho^k$ may alternate. Is that correct? Would it make sense to separate out the analysis of both cases?}
-
-% % \amir{This isn't a naive question at all. It is in a sense more principled to consider positive and negative ranges separately, this is what I did for the ODE version of the problem. In fact, I think using this approach the bound could be improved. 
-% % The main reason the current proof is "magical" is that I didn't have the right intuitions back then and I relied on much more formal steps to prove it. }
-%  Because $x\mapsto x/(1-x)$ is monotonically increasing for $x\in[0,1]$, for all $\rho\in[-1,1]$ we have 
-%     \begin{align*}
-%  \frac{|\kappa(\rho)|}{1-|\kappa(\rho)|}\le \frac{\kappa(|\rho|)}{1-\kappa(|\rho|)} \le \frac{|\rho|}{1-|\rho|}\alpha.
-%     \end{align*}
-% Where we invoked the inequality that was proven for $\rho\in[0,1], $ Plugging in the definition of $\Psi$ we have proven that for all $\rho$ we have
-% \begin{align*}
-%     \Psi(\kappa(\rho)) \le \alpha \Psi(\rho).
-% \end{align*}
-% We can conclude the proof by induction over $\ell.$
-% % \thomas{Except for my question about the constant above, the argument seems valid. I would still like to ponder about the proof a bit more after the first submission deadline.}
-
-% \textit{Other fixed points:}
-% What remains to show is that the only possible fixed points are $\rho^* \in \{0,1,-1\},$ and only $1,-1$ are neither locally or globally attractive.  
-
-% First, by contraction result we have so far, for any $\rho \in (-1,1),\rho\neq 0,$ then $|\kappa(\rho)|$ will be strictly smaller than $|\rho|,$ which contradicts with it being a fixed point. That only leaves $\{-1,0,1\}$ as possible fixed points. Now, we will prove that $-1,1$ are not locally attractive fixed points. 
-
-% For $\rho^*=1$ to be locally attracting, in some small $\epsilon$ neighborhood of it $\rho\in(1-\epsilon,1),$ $|\kappa(\rho)-1|$ must smaller than $|\rho-1|,$ which contradicts with our contraction result for any $\rho \in (-1,1)$ towards zero. A similar argument shows $-1$ cannot be locally attracting. 
-
-% Thus, we have shown that only $\{-1,0,1\}$ can be fixed point, and only $\rho^*=0$ is globally attracting, while $\{-1,1\}$ are neither locally or globally attracting. 
-% \end{proof}
-% \thomas{This result seems somewhat discouraging in the sense that there are no interesting (attractive) fixed points (other than orthogonalization). I guess the notion of centered activation functions plays a key role here. Maybe it's worthwhile to provide some orientation about the importance of the $\E\phi=0$ condition earlier in the paper.}
-
-
 \begin{proof}[Proof of Theorem~\ref{thm:global_attract}]
 We will proof all cases individually, starting with the first case that falls directly under a previous theorem. 
 
@@ -935,29 +854,7 @@ Recall the assumption that $\phi$ obeys $\E \phi(X)^2 = 1,\, X\sim N(0,1). $ Let
      \end{align*}
     which concludes the proof. 
 \end{itemize}
-% Let us assume that $\phi$ is square-integrable w.r.t Gaussian measure $\E \phi(X)^2 < \infty, $ where $X\sim N(0,1).$  Then, the following holds in the mean-field regime We have 
-% \begin{itemize}
-%     \item For MLP with post-RMS, pre-RMS, and pre-LN, the normalization layer will converge to  $z\to z/\sqrt{\E \phi(X)^2}$.
-%     \item In MLP with post-LN, the normalization layer will converge to $z \to  (z-\mu)/\phi$, where the $\mu = \E[\phi(X)]$ and $\phi = \sqrt{\E (\phi(X) - m)^2 }.$ 
-% \end{itemize}
 
-% Let us consider each case separately.
-
-% \begin{itemize}
-%     \item \textbf{Pre-act RMS and pre-act LN:} 
-%  Let us define $s:= \sqrt{\E \phi(X)^2}.$ Let us inductively assume that $\frac1d \|h^{\ell-1}\| = s.$ Thus, elements of $a:= W^\ell h^{\ell-1}$ are drawn i.i.d/ from $N(0,s^2).$ Thus, in the mean-field regime, the centering step of LN will be ineffective, and the normalization step of both LN and RMS will converge to $s.$ Thus, normalization will result in a Gaussian vector with its elements drawn i.i.d. from $N(0,1).$ Thus, the norm of the activations will be, by definition, for each element, we have $\E \phi(a_i)^2 = s^2.$ Finally, in the mean-field regime, the sample mean will converge to population mean $\frac1d\|h^\ell\|^2 = \frac1d\|\phi(a)\|^2 = s^2 $, proving the induction hypothesis. In the process, we have also proved that in the mean-field, both pre-act RMS and pre-act LN will converge to $z\to z/ s.$
-
-% \item \textbf{Post-act RMS:} Again, let us define $s:= \sqrt{\E \phi(X)^2}.$ Because $h^{\ell-1}$ is defined after the normalization. we have $\frac1d \|h^{\ell-1}\| = 1.$ Thus, elements of $a:= W^\ell h^{\ell-1}$ are drawn i.i.d from $N(0,1).$ Thus, after going through activation $\phi(a^\ell),$ for each element have $\E \phi(a_i)^2 = s^2.$ and therefore in the mean-field, the sample mean will converge to population mean $\frac1d\|h^\ell\|^2 = s^2 $, which proves the claim. Thus, RMS normalization will converge to $z \to z/ s.$
-
-% \item \textbf{Post-act LN:} The analysis is similar to above, except for the last step, layer normalization will subtract sample mean and sample standard deviation. In the mean-field, both of these quantities converge to their population counterparts $\mu = \E \phi(X),$ and $\sigma = \sqrt{\E (\phi(X) - \mu)^2 },$ proving that the post-act LN will act like $z \to  (z-\mu)/\sigma.$ 
-% \end{itemize}
-
-% Now that we have established that in all these cases, we can replace the normalization and activation layer with a new activation $\psi,$ that obeys $\E \psi(X)^2 = 1$ . The only difference is that in post-act LN, this new activation will also be centered $\E \psi(X) = 0,$, if and only if $\phi$ is centered.
-
-% \begin{itemize}
-%     \item For pre-act RMS and pre-act LN, and post-act RMS, we can construct a new activation $\psi$ that obeys $\E \psi(X)^2 = 1,$ and if $\phi$ is centered, the new activation is centered $\E \psi(X) = 0.$ Thus, assuming that the original activation is centered, we can involve Theorem~\ref{thm:global_attract} to conclude the proof.
-%     \item For post-act LN, we will get a new activation $\psi$ that obeys $\E \psi(X)^2 = 1,$ and $\E \psi(X) = 0.$ Thus we can invoke Theorem~\ref{thm:global_attract} to conclude the proof.
-% \end{itemize}
 \end{proof}
 
 \begin{remark}\label{rem:residual_ODE}
@@ -1038,72 +935,6 @@ It is worth noting that while \texttt{sigmoid} and \texttt{tanh} are tightly rel
 \paragraph{Kernel convergence theory vs empirical results.}
 The third and fourth columns show the kernel sequence (empirical: blue, theory: red) as a function of depth $\ell.$  The theoretical bound corresponds to Theorem~\ref{thm:global_attract}. In the fourth column, we plot the upper bound provided by the theorem, and in the third column, we use the upper bound on the distance to $\rho^*$ to give a lower or upper bound on the kernel sequence curve.  One of the most important takeaways is that for all activation functions except \texttt{exp}, the distances $|\rho_\ell-\rho^*|,$ shown on the log-scale, decay linearly with depth $\ell.$ This is perfectly aligned with the prediction of Theorem~\ref{thm:global_attract}, because \texttt{exp} is the only activation function that has polynomial convergence (See Table~\ref{tab:activation_stats}). The gap between theory and empirical values corresponds to the worst-case analysis for the global convergence rate. 
 
-% \section{Validation of the global convergence theorem}\label{sec:experiments}
-% Here we will provide some numerical validation of the global convergence theorem. 
-
-% \begin{remark}\label{rem:act-normalization}
-%     First off, note that Theorem~\ref{thm:global_attract} requires that the activations preserves (does not increase or decrease) the energy of the pre-activations $\E \phi(X)^2 = 1,$ for $X\sim N(0,1).$ While some activations, namely selu~\cite{klambauer2017self}, have this property, we can achieve it for all activations by inversely scaling them by a constant factor, equal to $C = \sqrt{\E\phi(X)^2}.$ After this step, we can quantify various values relevant to Theorem~\ref{thm:global_attract}. This step is applied for both the results in the table, as well as Figures~\ref{fig:validation_plots} and \ref{fig:validation_plots2}.  The scaling constant $C$ for each activation is shown in Table~\ref{tab:activation_stats}.
-% \end{remark}
-
-% Recall the conditions for each convergence from Theorem~\ref{thm:global_attract}:
-% \begin{itemize}
-%     \item $\kappa(0)=0$: Case 1, exponential convergence towards $\rho^*=0.$
-%     \item $\kappa(0)>0$:
-%     \begin{itemize}
-%         \item $\kappa'(1)<1$: Case 2, exponential convergence towards $\rho^*=1.$
-%         \item $\kappa'(1)=1$: Case 3, polynomial convergence towards $\rho^*=1.$
-%         \item $\kappa'(1)>1$: Case 4: exponential convergence towards some $\rho^*\in (0,1).$
-%     \end{itemize}
-% \end{itemize}
-% In Table~\ref{tab:activation_stats}, we have quantified the fixed points, relevant quantities, and convergence rates for each activation. This table shows that for the most popular activations that are used in practice, we can quantify a fixed point and explicit rate that their kernel sequence will converge to. 
-
-% It is worth noting that because Theorem~\ref{thm:global_attract} provides an upper bound, we cannot directly compare the quantified value of $\alpha$ for different cases, particularly when they correspond to different cases. In other words, because this is a worst case bound, it is possible that an activation manifests a much higher convergence than predicted. We will further explore the gaps between the empirical values and the upper bound in the subsequent figures. 
-
-
-% \begin{table}[h]
-% \centering
-% \renewcommand{\arraystretch}{1.3}
-% \begin{tabular}{|c|c|c|c|c|c|c|c|c|c| }
-% \toprule
-% $\phi$ & $C$ & $\alpha$ & $\rho_\star$ & $\kappa(\rho_\star)$ & $\kappa(0)$ & $\kappa'(0)$ & $\kappa'(1)$ & $\kappa'(\rho*)$ & \text{Convergence} \\ \midrule 
-% tanh &0.63 &0.93 &0.00 &0.00 &0.00 &0.93 &1.18 &0.93 &case 1 /exp.\\ 
-% selu &1.00 &0.97 &0.00 &0.00 &0.00 &0.97 &1.06 &0.97 &case 1 /exp.\\ 
-% relu &0.71 &0.95 &1.00 &1.00 &0.32 &0.50 &0.95 &0.95 &case 2 /exp.\\ 
-% sigmoid &0.54 &0.15 &1.00 &1.00 &0.85 &0.15 &0.15 &0.15 &case 2/exp. \\ 
-% exp &2.72 &0.74 &1.00 &1.00 &0.37 &0.37 &1.00 &1.00 &case 3/poly.\\ 
-% gelu &0.65 &0.93 &0.76 &0.76 &0.19 &0.59 &1.07 &0.93 &case 4/exp. \\ 
-% celu &0.80 &0.97 &0.60 &0.60 &0.04 &0.90 &1.04 &0.97 &case 4/exp.\\ 
-% elu &0.80 &0.97 &0.60 &0.60 &0.04 &0.90 &1.04 &0.97 &case 4/exp.\\ 
-% \bottomrule
-% \end{tabular}
-% \caption{Activation functions: a review of most commonly used activations (normalized, see Remark~\ref{rem:act-normalization}), according to Theorem~\ref{thm:global_attract}. In the last column, we have noted the case of convergence according to Theorem~\ref{thm:global_attract}, as well as the speed of convergence (exp: exponential, poly: polynomial) in depth. Note that only the exponential activation has polynomial convergence.}
-% \label{tab:activation_stats}
-% \end{table}
-
-
-% \subsection{Figures \ref{fig:validation_plots} and \ref{fig:validation_plots2}}
-% Each row of the figures shows one activation and each column is dedicated to the following (from left to right). 
-
-% \paragraph{Activation}. The First column shows the activation function itself, up to some scaling (see Remark~\ref{rem:act-normalization}). 
-
-% \paragraph{Kernel map and fixed point iterations} The second column shows kernel map $\kappa$ of each activation is plotted (blue) as defined in Definition~\ref{def:kernel_map}, and the fixed iterations over this kernel (red), as defined by pairs of points 
-% $$
-% (\rho_{\ell+1},\rho_\ell), \qquad \qquad \rho_{\ell+1}:=\kappa(\rho_\ell)
-% $$
-% where the $\rho_0$ indicates the initial value that is arbitrarily chosen, (shown as red dot marker). As the iterations progress, they converge to the fixed point ($\rho^*$, red star marker). The identity map can is shown to demonstrate visually how the iterations lead to the fixed point.  
-
-% It is worth noting that kernel maps of all activations are analytic, i.e., are smooth up to an arbitrary degree, even when the activation itself is non-smooth, which is the case for ReLU and SeLU at $x=0.$ We can also see that despite the non-monotonicity of some activations, such as gelu, the kernel map maintains its unique properties, such as having a unique globally attracting fixed point. 
-
-% These kernel map plots give an important insight into the global convergence of the kernel and the predictions of Theorem~\ref{thm:global_attract}. Intuitively, the fixed point is where the kernel map intersects with the identity line, and the speed that it converges to the fixed point is inversely related to slope at $\rho^*.$ For example, tanh and selu are close to identity line, and they exhibit a very slow convergence, while sigmoid deviates the most from identity and shows the fastest convergence rate. Overall, we can see here why deviation from identity, as captured by $\kappa'(\rho^*),$ and other terms, play an important role in the convergence of the kernel sequence. 
-
-% It is worth noting that while sigmoid and tanh are tightly related $\text{tanh}(x) =2\text{sigmoid}(2x)-1,$ their convergence properties are drastically different, with tanh converging exponentially towards zero (orthogonality or independence bias), while sigmoid converging exponentially towards $1$ (strong similarity bias). We can explain this by observing that the shifting ensures that the activations has zero mean postactivations, making $\rho^*$ a fixed point. 
-
-
-% \paragraph{kernel convergence theory vs empirical.}
-% Third and fourth column shows the kernel sequence (empirical: blue, theory: red) as a function of depth $\ell.$  With the theory bound corresponding to to Theorem~\ref{thm:global_attract}). In the fourth column, we plot the upper bounded provided by the theorem, and in the third column, we use the upper bound on the distance to $\rho^*$ to give a lower or upper bound on the kernel sequence curve.  One of the most important takeaways is that for all activations except $\exp,$ the distances $|\rho_\ell-\rho^*|,$ shown on the log-scale, decay linearly with depth $\ell.$ This is perfectly aligned with the prediction of Theorem~\ref{thm:global_attract}, because $\exp$ is the only activation that has polynomial convergence (See Table~\ref{tab:activation_stats}). The gap between theory and empirical values correspond to the worst case analysis for the global convergence rate. 
-
-
-
 
 \begin{figure*}[ht]
     \centering
@@ -1128,34 +959,5 @@ The third and fourth columns show the kernel sequence (empirical: blue, theory: 
     \label{fig:leaky_relu}
 \end{figure*}
 
-
-% % \begin{figure*}[ht!]
-% %     \centering
-% %     \begin{subfigure}[b]{0.7\textwidth}
-% %         \centering
-% %         \includegraphics[width=\textwidth]{./kernel_map_convergence_case_0_tanh.pdf}
-% %         \caption{\small Case 1. Tanh activation.}
-% %     \end{subfigure}
-% %     \hfill
-% %     \begin{subfigure}[b]{0.7\textwidth}
-% %         \centering
-% %         \includegraphics[width=\textwidth]{./kernel_map_convergence_case_1_relu.pdf}
-% %         \caption{\small Case 2: ReLU activation.}
-% %     \end{subfigure}
-% %     \\
-% %     \begin{subfigure}[b]{0.7\textwidth}
-% %         \centering
-% %         \includegraphics[width=\textwidth]{./kernel_map_convergence_case_2_exp.pdf}
-% %         \caption{\small Case 3: Exponential activation.} 
-% %     \end{subfigure}
-% %     \hfill
-% %     \begin{subfigure}[b]{0.7\textwidth}
-% %         \centering
-% %         \includegraphics[width=\textwidth]{./kernel_map_convergence_case_3_gelu.pdf}
-% %         \caption{\small Case 4: GELU activation.}
-% %     \end{subfigure}
-% %     \caption{\small Same as Figure~\ref{fig:validation_plots} for some commonly used activations. Note that because the raw activations do not necessarily obey $\E \phi^2(X)=1,$ we have to scale by some constant $C$ to make the activations obey the conditions of the theorem.}
-% %     \label{fig:validation_plots_real_activations}
-% % \end{figure*}
 
 \end{document}
