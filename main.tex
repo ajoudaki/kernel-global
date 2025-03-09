@@ -1,6 +1,6 @@
 \documentclass[twoside]{article}
 
-\usepackage{aistats2025}
+\usepackage[accepted]{aistats2025}
 
 % \usepackage{biblatex}
 \usepackage{natbib}
@@ -34,11 +34,22 @@
 
 \begin{document}
 
+\runningtitle{Emergence of Globally Attracting Fixed Points in Deep NNs}
+\runningauthor{Joudaki \& Hofmann}
+
 % Title and authors
 \twocolumn[
 \aistatstitle{Emergence of Globally Attracting Fixed Points in\\ Deep Neural Networks With Nonlinear Activations}
-\aistatsauthor{Anonymous Author(s)}
-\aistatsaddress{Affiliation(s)} ]
+\aistatsauthor{
+  Amir Joudaki \\
+  ETH Zürich\\
+  \texttt{amir.joudaki@inf.ethz.ch} \\
+  \And
+  Thomas Hofmann \\
+  ETH Zürich\\
+  \texttt{thomas.hofmann@inf.ethz.ch}
+}
+\aistatsaddress{ETH Zürich} ]
 
 \begin{abstract}
 Understanding how neural networks transform input data across layers is fundamental to unraveling their learning and generalization capabilities. Although prior work has used insights from kernel methods to study neural networks, a global analysis of how the similarity between hidden representations evolves across layers remains underexplored. In this paper, we introduce a theoretical framework for the evolution of the kernel sequence, which measures the similarity between the hidden representation for two different inputs. Operating under the mean-field regime, we show that the kernel sequence evolves deterministically via a kernel map, which only depends on the activation function. By expanding activation using Hermite polynomials and using their algebraic properties, we derive an explicit form for kernel map and fully characterize its fixed points. Our analysis reveals that for nonlinear activations, the kernel sequence converges globally to a unique fixed point, which can correspond to orthogonal or similar representations depending on the activation and network architecture. We further extend our results to networks with residual connections and normalization layers, demonstrating similar convergence behaviors. This work provides new insights into the implicit biases of deep neural networks and how architectural choices influence the evolution of representations across layers.
@@ -54,7 +65,7 @@ One approach to studying these transformations is through the lens of kernel met
 
 Despite these advances, an important question remains unexplored: \emph{How does the similarity between hidden layer representations evolve across layers, and how is that affected by particular choices of nonlinear functions?} Previous work has mainly focused on local behaviors or specific initialization conditions \citep{saxe2013exact, schoenholz2016deep, pennington2017resurrecting}. A comprehensive global analysis of neural kernel sequence fixed points and convergence properties, particularly in the presence of nonlinear activations, is still incomplete.
 
-This paper addresses this gap by introducing and analyzing the evolution of kernel sequences in deep neural networks. Specifically, we consider the kernel sequence $ k (h_\ell (x), h_\ell (y)) $, where $ k$ denotes a similarity measure, and $ h_\ell (x) $ and $ h_\ell (y) $ are representations of the inputs $ x$ and $ y$ at layer $ ell$. Understanding whether and how this sequence converges to a fixed point as the depth of the network increases is crucial for uncovering the inherent implicit biases of deep networks.
+This paper addresses this gap by introducing and analyzing the evolution of kernel sequences in deep neural networks. Specifically, we consider the kernel sequence $ k (h_\ell (x), h_\ell (y)) $, where $ k$ denotes a similarity measure, and $ h_\ell (x) $ and $ h_\ell (y) $ are representations of the inputs $ x$ and $ y$ at layer $\ell$. Understanding whether and how this sequence converges to a fixed point as the depth of the network increases is crucial for uncovering the inherent implicit biases of deep networks.
 
 Our analysis builds upon foundational work in neural network theory and leverages mean-field theory to simplify the analysis. By considering the infinite-width limit, stochastic sequences become deterministic, allowing us to focus on the underlying dynamics without the interference of random fluctuations \citep{poole2016exponential, yang2019meanfield, mei2019mean}.
 
@@ -73,15 +84,16 @@ The study of deep neural networks through the lens of kernel methods and mean-fi
 
 The propagation of signals in deep networks has been studied in the works of \citet{schoenholz2016deep} and \citet{pennington2017resurrecting}. Previous studies have also explored the critical role of activation functions in maintaining signal propagation and stable gradient behavior in deep networks \citep{hayou2019impact}. These studies focused on understanding the conditions required for the stable propagation of information and the avoidance of signal amplification or attenuation. However, these analyses often concentrated on local behaviors or specific conditions, leaving a gap in understanding the global evolution of representations across layers. 
 
-Hermite polynomials have been used in probability theory and statistics, particularly in the context of Gaussian processes \citep{williams2006gaussian}. Although \citet{poole2016exponential} and \citet{daniely2016toward} have utilized polynomial expansions to analyze neural networks, they do not study global dynamics in neural networks, as presented in this paper. To the best of our knowledge, the only existing work that uses Hermite polynomials in the mean-field regime to study the global dynamics of the kernel is \citet{joudaki2023impact}. However, this study only covers centered activations, which fail to capture several striking global dynamics covered in this study.
+Hermite polynomials have been used in probability theory and statistics, particularly in the context of Gaussian processes \citep{williams2006gaussian}. Although~\citet{poole2016exponential} and \citet{daniely2016toward} have utilized polynomial expansions to analyze neural networks, they do not study global dynamics in neural networks, as presented in this paper. To the best of our knowledge, the only existing work that uses Hermite polynomials in the mean-field regime to study the global dynamics of the kernel is by~\citet{joudaki2023impact}. However, this study only covers centered activations, which fail to capture several striking global dynamics covered in this study.
 
 Our work extends these foundational studies by providing an explicit algebraic framework to analyze the global convergence of kernel sequences in deep networks with nonlinear activations. Using Hermite polynomial expansions, we offer a precise characterization of the kernel map and its fixed points, contributing new insights into the implicit biases of nonlinear activations.
 
 \section{Preliminaries}
 This section introduces the fundamental concepts, notations, and definitions used throughout this paper. 
-If $X$ and $Y$ are vectors in $\mathbb{R}^n$, we use the inner product notation $\langle X, Y \rangle_\avg$ to denote their average inner product $ = \frac{1}{n} \sum_{i=1}^n X_i Y_i.$  We consider a feedforward neural network with $L$ layers and constant layer width $d$. The network takes an input vector $x \in \mathbb{R}^d$ and maps it to an output vector $h^L(x) \in \mathbb{R}^d$ through a series of transformations. The hidden representations in each layer $\ell$ are denoted by $h^\ell(x)$. The transformation in each layer is composed of a linear transformation followed by a nonlinear activation function $\phi$. We consider the multilayer perceptron (MLP), the hidden representation at layer $\ell$ is given by:
+
+If $X$ and $Y$ are vectors in $\R^n$, we use the inner product notation $\langle X, Y \rangle_\avg$ to denote their average inner product $ = \frac{1}{n} \sum_{i=1}^n X_i Y_i.$  We consider a feedforward neural network with $L$ layers and constant layer width $d$. The network takes an input vector $x \in \R^d$ and maps it to an output vector $h^L(x) \in \R^d$ through a series of transformations. The hidden representations in each layer $\ell$ are denoted by $h^\ell(x)$. The transformation in each layer is composed of a linear transformation followed by a nonlinear activation function $\phi$. We consider the multilayer perceptron (MLP), the hidden representation at layer $\ell$ is given by:
 \begin{align}
-& h^\ell(x) = \phi\left(\frac{1}{\sqrt{d}}W^\ell h^{\ell-1}(x)\right), && W^\ell \in \mathbb{R}^{d \times d},
+& h^\ell(x) = \phi\left(\frac{1}{\sqrt{d}}W^\ell h^{\ell-1}(x)\right), && W^\ell \in \R^{d \times d},
 \end{align}
 where $h^0(x)=x$ is identified with the input. We can assume that elements of $W^\ell$ are drawn i.i.d.~from a zero mean distribution, unit variance distribution. Two prominent choices for weight distributions, Gaussian $N(0,1)$ and uniform distribution $\text{Uniform}[-1,1],$ satisfy these conditions. In some variations of the MLP, we will use normalization layers and residual connections. Finally, the neural kernel between two inputs $x$ and $y$ at layer $\ell$ is defined as:
 \begin{align}
@@ -150,7 +162,7 @@ Although Hermite polynomials have been used in probability theory and statistics
 
 The crucial property of Hermite polynomials is their  orthogonality:
 \begin{align}\label{eq:hermite_orthogonality}
-\E\he_k(X)\he_l(X) = \delta_{kl}, \quad X \sim \mathcal N(0,1).
+\E\he_k(X)\he_l(X) = \delta_{kl}, && X \sim \mathcal N(0,1).
 \end{align}
 Scaling by $1/\sqrt{k!}$ ensures that polynomials form a \emph{orthonormal} basis. Based on this property, we can define:
 \begin{definition}\label{def:hermite_expansion}
@@ -175,8 +187,9 @@ For standard-normal random variables $X,Y$ with covariance $\rho$ it holds
 \end{align*}
 \end{lemma}
 
-This lemma states that given two Gaussian random variables $X, Y$ with covariance $\rho$, the expectation of the product of Hermite polynomials is zero unless the indices are equal (see Section~\ref{sec:proofs} for proof).
-The Lemma~\ref{lem:mehler_kernel} is crucial for our theory. Based on this lemma, we can express the kernel map $\kappa$ in terms of the Hermite coefficients, showing a particular structure of the kernel map.
+This lemma states that given two Gaussian random variables $X, Y$ with covariance $\rho$, the expectation of the product of Hermite polynomials is zero unless the indices are equal (see explanations in Section~\ref{sec:proofs} for proof).
+
+The lemma~\ref{lem:mehler_kernel} is crucial for our theory. Based on this lemma, we can express the kernel map $\kappa$ in terms of the Hermite coefficients, showing a particular structure of the kernel map.
 
 \begin{corollary}
     \label{cor:hermite_covariance}
@@ -190,7 +203,7 @@ We have the following explicit form for the kernel map:
 
 The proof follows directly from the definition of kernel map, expanding $\phi$ in the Hermite basis and then applying Lemma~\ref{lem:mehler_kernel}. 
 
-~\citet{daniely2016toward} show a similar analytic form for dual activation, which aligns with our definition of kernel map. However, they did not use this to study global dynamics. To our knowledge, the only study that uses Hermite polynomials to study global dynamics is~\citep{joudaki2023impact}, which is limited to centered activations. i.e., those that satisfy $\E \phi(X)=0,$ or equivalently $\kappa(0)=c_0^2 = 0.$
+\citet{daniely2016toward} show a similar analytic form for dual activation, which aligns with our definition of kernel map. However, they did not use this to study global dynamics. To our knowledge, the only study that uses Hermite polynomials to study global dynamics is~\citep{joudaki2023impact}, which is limited to centered activations. i.e., those that satisfy $\E \phi(X)=0,$ or equivalently $\kappa(0)=c_0^2 = 0.$
 
 % Before we turn our attention to convergence, let us draw some links between the properties of activation functions, their kernel map, and their Hermite coefficients.
 % \thomas{I am not sure I understand the table below. Does the first case include $\tanh$?}
@@ -229,7 +242,7 @@ In this section, we will show that for any nonlinear activation function, there 
 
 \begin{theorem}
 \label{thm:global_attract}
-Given a nonlinear activation function $\phi$ with kernel  $\kappa$ such that $\kappa(1)=1$. Define the kernel sequence $\rho_{\ell+1}=\kappa(\rho_\ell)$, with $\rho_0 \in (-1,1)$. Then there is a unique globally contracting fixed point $\rho^*$, which is necessarily non-negative $\rho^*\in[0,1]$. The only other fixed points distinct from $\rho^*,$ could be $\pm 1,$ neither of which is stable. Furthermore, we have the following contraction rate towards $\rho^*$:
+Given a nonlinear activation function $\phi$ with kernel map $\kappa$ such that $\kappa(1)=1$. Define the kernel sequence $\rho_{\ell+1}=\kappa(\rho_\ell)$, with $\rho_0 \in (-1,1)$. Then there is a unique globally contracting fixed point $\rho^*$, which is necessarily non-negative $\rho^*\in[0,1]$. The only other fixed points distinct from $\rho^*,$ could be $\pm 1,$ neither of which is stable. Furthermore, we have the following contraction rate towards $\rho^*$:
 \begin{enumerate}
     \item If $\kappa(0)=0$ then $\rho^*=0$ is an attracting with rate 
     \begin{align*}
@@ -272,9 +285,9 @@ Broadly speaking, we can think of three categories of bias:
     \item \textit{Strong similarity $\rho^*=1$}: Implies that as the network becomes deeper, representations become more similar or aligned, as indicated by inner products converging to one, exponentially fast in case 2, polynomially in case 3. 
 \end{itemize}
 
-See Section~\ref{sec:experiments} for a review of commonly used activations, and their biases according to Theorem~\ref{thm:global_attract}.
+See section~\ref{sec:experiments} for a review of commonly used activations, and their biases according to Theorem~\ref{thm:global_attract}.
 
-The bias of activation and normalization layers has been extensively studied in the literature. For example, \citet{daneshmand2021batch} show that batch normalization with linear activations makes representations more orthogonal, relying on a technical assumption that is left unproven (see assumption $\mathcal{A}_1$). Similarly, \citet{joudaki2023bridging} extend this to odd activations yet introduce another technical assumption about the ergodicity of the chain, which is hard to verify or prove (see Assumption 1). \citet{yang2019meanfield} prove the global convergence of the Gram matrix of a network with linear activation and batch normalization (see Corollary F.3) toward a fixed point. However, the authors explain that because they cannot establish such a global convergence for general activations (see page 20, under the paragraph titled Main Technical Results), they resort to finding locally stable fixed points, meaning that if preactivations have such a Gram matrix structure and they are perturbed infinitesimally. Recent studies have also examined the evolution of covariance structures in deep and wide networks using stochastic differential equations \citep{li2022neural}, which is similar to kernel dynamics and kernel ODE introduced here. However, the covariance SDE approach does not theoretically show the global convergence towards these solutions. Finally, \citet{joudaki2023impact} establish a global bias towards orthogonality for centered activations (see Theorem A2), which aligns with case 1 of Theorem~\ref{thm:global_attract}, and to extend to other activations, they add layer normalization after the activation to make it centered. In contrast, Theorem~\ref{thm:global_attract} covers all existing activations. 
+The bias of activation and normalization layers has been extensively studied in the literature. For example, \citet{daneshmand2021batch} show that batch normalization with linear activations makes representations more orthogonal, relying on a technical assumption that is left unproven (see assumption $\mathcal{A}_1$). Similarly, \citet{joudaki2023bridging} extend this to odd activations yet introduce another technical assumption about the ergodicity of the chain, which is hard to verify or prove (see Assumption 1). In a similar vein, ~\citet{meterez2024towards} show the global convergence towards orthogonality in a network with batch normalization and orthogonal random weights, but do not theoretically analyze nonlinear activations. \citet{yang2019meanfield} prove the global convergence of the Gram matrix of a network with linear activation and batch normalization (see Corollary F.3) toward a fixed point. However, the authors explain that because they cannot establish such a global convergence for general activations (see page 20, under the paragraph titled Main Technical Results), they resort to finding locally stable fixed points, meaning that if preactivations have such a Gram matrix structure and they are perturbed infinitesimally. Recent studies have also examined the evolution of covariance structures in deep and wide networks using stochastic differential equations \citep{li2022neural}, which is similar to kernel dynamics and kernel ODE introduced here. However, the covariance SDE approach does not theoretically show the global convergence towards these solutions. Finally, \citet{joudaki2023impact} establish a global bias towards orthogonality for centered activations (see Theorem A2), which aligns with case 1 of Theorem~\ref{thm:global_attract}, and to extend to other activations, they add layer normalization after the activation to make it centered. In contrast, Theorem~\ref{thm:global_attract} covers all existing activations. 
 
 One alternative way of interpreting the results of Theorem~\ref{thm:global_attract} is that as we pass two inputs through nonlinear activations, it `forgets' the similarity between inputs and converges to a fixed point value that is independent of the inputs and only depends on the activation. Taking the view that the network ought to remember some similarity of the input for training, we can leverage Theorem~\ref{thm:global_attract} to strike a balance between depth and nonlinearity of the activations, as argued in the following.
 
@@ -286,8 +299,7 @@ Let $\epsilon > 0$ be the some numerical precision, and let $\phi$ be an activat
 Approximately, $\ln(1/\epsilon)$ represents the number of bits of numerical precision available in floating-point representations. For example for \texttt{float32} numbers, $\ln(1/\epsilon)$ is approximately $\ln(1/2^{-128}) \approx 88$. Therefore, when the network depth $\ell$ exceeds threshold $88/\ln(1/\kappa'(1))$, the representations of any two inputs will become numerically indistinguishable from one another. This effect propagates through subsequent layers, potentially making training ineffective or impossible. Notably, ReLU and sigmoid satisfy the conditions of this corollary, implying that this phenomenon can occur in networks utilizing these activations. Previous works on rank collapse~\citep{daneshmand2020batch,noci2022signal} and covariance degeneracy~\citep{li2022neural} have observed and studied this phenomenon in various settings. However, the explicit and closed-form relationship presented in Corollary~\ref{cor:convergence_precision} provides a novel and precise quantification of this effect.
 
 One of the most striking results of this theorem is that for any nonlinear activation, there is exactly one fixed point $\rho^*$ that is globally attractive, while other fixed points are not stable. Furthermore, the fixed point is necessarily non-negative. This implies that for any MLP with nonlinear activations, the covariance of preactivations will converge towards a fixed point, which is always non-negative. 
-It turns out that there is a geometric reason why no negative fixed points could exist (See remark~\ref{rem:no_negative_geometric})
-
+It turns out that there is a geometric reason why no globally attracting negative fixed point could exist (See remark~\ref{rem:no_negative_geometric}).
 
 % Note that in some of the cases of Theorem~\ref{thm:global_attract}, we showed contraction under the potential $|\rho|/(1-|\rho|)$ Because $|\rho|/(1-|\rho|)$ is a monotonically increasing with $|\rho|$, the contraction of $|\rho_\ell|/(1-|\rho_\ell|)$ implies contraction of $|\rho_\ell|$ towards zero. 
 Theorem~\ref{thm:global_attract} has several aspects that may seem counterintuitive. For instance, case 1 demonstrates that a quantity $|\rho|/(1-|\rho|)$ decays exponentially as depth increases. To gain a better understanding of the theories behind Theorem~\ref{thm:global_attract}, we can cast our layer-wise kernel dynamics as a continuous-time dynamical system, which is discussed next. For a detailed proof of Theorem~\ref{thm:global_attract}, please refer to Section~\ref{sec:proofs}.
@@ -328,9 +340,8 @@ In this case, the term corresponding to $k=1$ contributes positively to a faster
 where we used the fact that $\sum_{k=1}^\infty c_k^2 = 1.$ 
 Finally, we can solve this ODE 
 \begin{align*}
-    &\int \frac{d\rho}{\rho(1-\rho)} = - (1-c_1^2)\int t \\
-    % \implies \ln \frac{|\rho(t)|}{|1-\rho(t)|} = -t (1-c_1^2) + C\\
-    \implies &\frac{|\rho(t)|}{|1-\rho(t)|} = C \exp(-t(1-c_1^2)),
+     % \int \frac{d\rho}{\rho(1-\rho)} = - (1-c_1^2)\int t 
+     \implies \frac{|\rho(t)|}{|1-\rho(t)|} = C \exp(-t(1-c_1^2)),
 \end{align*}
 where $C$ corresponds to the initial values. 
 % Solving for the constant and assuming that our continuous approximation of the discrete equation is accurate, we can state that approximately:
@@ -373,7 +384,7 @@ This further highlights the value of algebraic properties of Hermite polynomials
 We can observe that the kernel ODE rate derived by analysis of kernel ODE is largely aligned with the exponential convergence of this term in Theorem~\ref{thm:global_attract}. The slight discrepancy between the exponential rates between Theorem~\ref{thm:global_attract} and the kernel ODE rate $\exp(-(1-\kappa'(0))$ is due to the discrete-continuous approximation. Despite this small discrepancy, the solution to kernel ODE can help us arrive at the right form for the solution. We can leverage the solution to kernel ODE to arrive at a bound for the discrete problem, namely using induction over steps.
 
 % It might be worth that the slowest convergence in the positive range when $\phi  = c_1 \he_1 + \sqrt{1-c_1^2}\he_2,$ and in the negative range when $\phi  = c_1 \he_1 + \sqrt{1-c_1^2}\he_3.$ 
-Since Theorem~\ref{thm:global_attract} only provides an upper bound and not a lower bound for convergence, one natural question is: how big is the gap between this worst case and the exact ODE convergence rates? We can construct activations where the convergence is substantially faster, such as doubly exponential convergence (see Corollary~\ref{cor:double_exp}). However, for all practically used activations, the gap between our bound and the real convergence is enough (See Section~\ref{sec:experiments}).
+Since Theorem~\ref{thm:global_attract} only provides an upper bound and not a lower bound for convergence, one natural question is: how big is the gap between this worst case and the exact ODE convergence rates? We can construct activations where the convergence is substantially faster, such as doubly exponential convergence (see Corollary~\ref{cor:double_exp}). However, for all practically used activations, the gap between our bound and the real convergence is enough (See section~\ref{sec:experiments}).
 
 
 
@@ -421,8 +432,8 @@ Furthermore, we have: 1) fixed points of $\kappa_\res(\rho)$ are the same as tho
 \end{proposition}
 
 
-\paragraph{Implications.} Proposition~\ref{prop:residual_kernel_map} reveals that residual connections modify the kernel map by blending the original kernel map with the identity function, weighted by the residual $r$. This adjustment has several interesting implications. Our analysis here gives a quantitative way of balancing depth with the nonlinearity of activations. For example, \citet{li2022neural} show as we `shape' the negative slope of a leaky ReLU towards identity, it will prevent degenerate covariance in depth. In light of Proposition~\ref{prop:residual_kernel_map} and Corollary~\ref{cor:convergence_precision}, we can write leaky ReLU as a linear combination of ReLU and identity and conclude that as residual strength increases ($r\to 1$), the convergence rate becomes slower and thus degeneracy happens at deeper layers, which aligns with the prior study. 
-Another interesting byproduct of Proposition~\ref{prop:residual_kernel_map} is that it shows that when $r\to 1$ (highly strong residuals), the kernel ODE becomes an exact model for kernel dynamics (See remark~\ref{rem:residual_ODE}).
+\paragraph{Implications.} Proposition~\ref{prop:residual_kernel_map} reveals that residual connections modify the kernel map by blending the original kernel map with the identity function, weighted by the residual $r$. This adjustment has several interesting implications. Our analysis here gives a quantitative way of balancing depth with the nonlinearity of activations. For example, \citet{li2022neural} show as we `shape' the negative slope of a leaky ReLU towards identity, it will prevent degenerate covariance in depth. In light of proposition~\ref{prop:residual_kernel_map} and corollary~\ref{cor:convergence_precision}, we can write leaky ReLU as a linear combination of ReLU and identity and conclude that as residual strength increases ($r\to 1$), the convergence rate becomes slower and thus degeneracy happens at deeper layers, which aligns with the prior study. 
+Another interesting byproduct of proposition~\ref{prop:residual_kernel_map} is that it shows that when $r\to 1$ (highly strong residuals), the kernel ODE becomes an exact model for kernel dynamics (See remark~\ref{rem:residual_ODE}).
 
 
 
@@ -438,7 +449,7 @@ Normalization layers are widely used in deep learning to stabilize and accelerat
   \begin{equation}
   \operatorname{LN}(z) = \frac{z - \mu(z)}{\sigma(z)},
   \end{equation}
-  where $\mu(z)$ is the mean, and $\sigma(z)$ is the standard deviation of the vector $z \in \mathbb{R}^d$.
+  where $\mu(z)$ is the mean, and $\sigma(z)$ is the standard deviation of the vector $z \in \R^d$.
   \item \textit{Root Mean Square (RMS) Normalization}:
   \begin{equation}
   \operatorname{RN}(z) = \frac{z}{ \sqrt{ \frac{1}{d} \sum_{i=1}^d z_i^2 } }.
@@ -910,9 +921,18 @@ Recall the assumption that $\phi$ obeys $\E \phi(X)^2 = 1,\, X\sim N(0,1). $ Let
     \item $\psi = \phi\circ RN$ and $\psi = \phi\circ LN$: Because each element of $Z$ has zero mean and unit variance, in the mean field regime, the sample mean and variances will be equal to the their population counterparts, implying that $LN(Z) = Z$ and $RN(Z) = Z.$ In other words, they act as identity. Thus, in both cases, in the mean-field regime we have $\psi = \phi.$ Thus, the kernel map also remains the same. 
     \item $\psi = RN \circ \phi$: In this case, because of the assumption on activation for Gaussian preactivations we have $\E \phi(Z_i)^2 = 1,$ for all $i=1,\dots, d.$ Because elements of $Z$ are i.i.d., by law of large numbers $\frac1d\|\phi(Z)\|^2$ will converge to its expected value $1.$ Thus, again, the normalization step in RN becomes ineffective, implying that in the mean-field we have $\psi = \phi.$ Thus, the kernel map also remains the same. 
     \item $\psi = LN \circ \phi$: By definition of kernel map of activation, we have  
-    $$\E \phi(Z_i) = \sqrt{\kappa_\phi(0)}, \quad \mathrm{Var}(Z_i) = \E \phi(Z_i)^2 - (\E \phi(Z_i))^2 = \kappa_\phi(1) - \kappa_\phi(0).$$ 
+     \begin{align*}
+         \E \phi(Z_i) &= \sqrt{\kappa_\phi(0)}, 
+        && \mathrm{Var}(Z_i) = \E \phi(Z_i)^2 - (\E \phi(Z_i))^2 =  1- \kappa_\phi(0)
+     \end{align*}
     Thus, again by law of large numbers we will have 
-    $$\psi = (\phi - \sqrt{\kappa_\phi(0)})/\sqrt{\kappa_\phi(1) - \kappa_\phi(0)}.$$ Now, if we look at the kernel map of this affine transformation, we have $$\kappa_\psi(\rho) = (\kappa_\phi(\rho) - \kappa_\phi(0))/(\kappa_\phi(1)-\kappa_\phi(0)),$$
+    $$\psi = (\phi - \sqrt{\kappa_\phi(0)})/\sqrt{1 - \kappa_\phi(0)}.$$ Now, if we look at the kernel map of this affine transformation, we have 
+     \begin{align*}
+     \kappa_\psi(\rho) &= \E \psi(X)\psi(Y)\\
+     &= \E \frac{(\phi(X)-\sqrt{\kappa_\phi(0)} )}{\sqrt{\kappa(1)-\kappa(0)}}\frac{(\phi(Y)-\sqrt{\kappa_\phi(0)} )}{\sqrt{1-\kappa_\phi(0)}}\\
+     &= \frac{\E \phi(X)\phi(Y) - \kappa_\phi(0)}{1-\kappa_\phi(0)}\\
+     &= \frac{\kappa_\phi(\rho)-\kappa_\phi(0)}{1-\kappa_\phi(0)}
+     \end{align*}
     which concludes the proof. 
 \end{itemize}
 % Let us assume that $\phi$ is square-integrable w.r.t Gaussian measure $\E \phi(X)^2 < \infty, $ where $X\sim N(0,1).$  Then, the following holds in the mean-field regime We have 
