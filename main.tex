@@ -12,7 +12,7 @@
 \usepackage{booktabs}
 \usepackage{xcolor}
 \usepackage[hidelinks]{hyperref}
-
+\usepackage{type1cm}
 \newcommand{\avg}{\text{avg}}
 \newcommand{\km}{\kappa_\phi}
 \newcommand{\res}{\text{res}}
@@ -50,10 +50,12 @@
   ETH Zürich\\
   \texttt{thomas.hofmann@inf.ethz.ch}
 }
-\aistatsaddress{ETH Zürich} ]
+\aistatsaddress{ETH Zürich} 
+]
 
 \begin{abstract}
 Understanding how neural networks transform input data across layers is fundamental to unraveling their learning and generalization capabilities. Although prior work has used insights from kernel methods to study neural networks, a global analysis of how the similarity between hidden representations evolves across layers remains underexplored. In this paper, we introduce a theoretical framework for the evolution of the kernel sequence, which measures the similarity between the hidden representation for two different inputs. Operating under the mean-field regime, we show that the kernel sequence evolves deterministically via a kernel map, which only depends on the activation function. By expanding activation using Hermite polynomials and using their algebraic properties, we derive an explicit form for kernel map and fully characterize its fixed points. Our analysis reveals that for non-linear activations, the kernel sequence converges globally to a unique fixed point, which can correspond to orthogonal or similar representations depending on the activation and network architecture. We further extend our results to networks with residual connections and normalization layers, demonstrating similar convergence behaviors. This work provides new insights into the implicit biases of deep neural networks and how architectural choices influence the evolution of representations across layers.
+\footnote{\small{Code available at: \url{https://github.com/username/repository}}}
 \end{abstract}
 
 
@@ -89,6 +91,14 @@ The propagation of signals in deep networks has been studied in the works of \ci
 Hermite polynomials have been used in probability theory and statistics, particularly in the context of Gaussian processes \citep{williams2006gaussian}. Although~\citet{poole2016exponential} and \citet{daniely2016toward} have utilized polynomial expansions to analyze neural networks, they do not study global dynamics in neural networks, as presented in this paper. To the best of our knowledge, the only existing work that uses Hermite polynomials in the mean-field regime to study the global dynamics of the kernel is by~\citet{joudaki2023impact}. However, this study only covers centered activations, which fail to capture several striking global dynamics covered in this study.
 
 Our work extends these foundational studies by providing an explicit algebraic framework to analyze the global convergence of kernel sequences in deep networks with nonlinear activations. Using Hermite polynomial expansions, we offer a precise characterization of the kernel map and its fixed points, contributing new insights into the implicit biases of non-linear activations.
+
+% \textbf{Sequential vs. Joint Limits.} 
+While our analysis focuses on a global, layerwise infinite‐width kernel dynamics—some recent works approach the infinite‐limit regime from other angles. 
+For instance, \citet{li2022neural} consider a joint depth‐and‐width limit of certain ``shaped'' networks and obtain a neural covariance stochastic differential equation, yet their analysis stops short of guaranteeing convergence to a particular destribution for an activation. 
+Meanwhile, \citet{fan2020spectra} examine the eigenvalue distributions of kernels in linearly widening networks but focus only on linear networks with no activations.
+In contrast, our mean‐field framework yields a closed‐form kernel dynamics that is driven towards a globally attracting fixed point. 
+Thus, beyond merely describing local or partial behaviors, we establish global convergence for the kernel sequence in deep networks with nonlinear activations, extending prior sequential analyses, namely by \citet{yang2019meanfield}, to reveal that every pair of inputs follows a single deterministic path to a stable kernel equilibrium.
+
 
 \section{PRELIMINARIES}
 This section introduces the fundamental concepts, notations, and definitions used throughout this paper. 
@@ -997,6 +1007,5 @@ The third and fourth columns show the kernel sequence (empirical: blue, theory: 
     \caption{\small Continuation of Figure\ref{fig:validation_plots}, for \texttt{LeakyReLU} with various negative slopes. }
     \label{fig:leaky_relu}
 \end{figure*}
-
 
 \end{document}
