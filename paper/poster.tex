@@ -61,11 +61,11 @@
     \begin{itemize}
         \item Demystifying role of nonlinear activations.
         \item Make choice of activations more principled.
-        \item Demystifying how depth and nonlinearity interact to shape input  similarity at initializtion
+        \item Demystifying how depth and nonlinearity interact to shape input  similarity at initialization.
     \end{itemize}
-    A crucial aspect is how the similarity between representations of different inputs evolves with depth as a function of the non-linearity function. Does it vanish? Saturate? Depend fundamentally on the activation function?
+    % A crucial aspect is how the similarity between representations of different inputs evolves with depth as a function of the non-linearity function. Does it vanish? Saturate? Depend fundamentally on the activation function?
     \\[2mm]
-    \textbf{Our Goal:} Analyze the global, layer-wise evolution of representation similarity at initialization.
+    \textbf{Our Goal:} Analyze the global, layer-wise evolution of representation similarity at initialization. Do similarities vanish? Saturate towards a fixed value? Do they depend on the activation function?
 }
 
 \block{Problem Setup: The Kernel Sequence}{
@@ -96,8 +96,11 @@
         $$ \boxed{\km(\rho) = \sum_{k=0}^\infty c_k^2 \rho^k} $$
         An elegant power series determined \emph{only} by the activation's Hermite coefficients ($c_k^2$)!
     \end{corollary}
-    \includegraphics[width=0.98\linewidth]{paper/figures/hermite_approximation_poster.pdf} 
-     \textit{Observations:} Hermite polynomials are analogue of Fourier basis for Gaussian kernel. 
+}
+
+\block{Illustration:}{
+Hermite polynomials are analogue of Fourier basis for Gaussian kernel. Here is the approximation of ReLU:
+\includegraphics[width=0.98\linewidth]{paper/figures/hermite_approximation_poster.pdf} 
 }
 
 % === COLUMN 2: Main Result & Implications ===
@@ -127,8 +130,9 @@
     We plot the kernel map $\km(\rho)$ and the convergence trajectory $\rho_\ell$ vs. depth $\ell$.
     \includegraphics[width=0.98\linewidth]{kernel_convergence_poster} % Needs kernel_convergence.pdf
     \vspace{2mm}
-    % \includegraphics[width=0.98\linewidth]{kernel_convergence_2} % Needs kernel_convergence_2.pdf
-    \textit{Observations:} Empirical convergence matches theoretical predictions (fixed points, exponential/polynomial decay). The Hermite analysis accurately captures the dynamics.
+    \textit{Observations:} Empirical convergence matches theoretical predictions (fixed points, exponential/polynomial decay). The Hermite analysis accurately captures the dynamics.\\
+    \textbf{The ODE view}. \\
+    \includegraphics[width=0.98\linewidth]{kernel_ODE_fpi_poster.pdf} \\\textit{Observations:} Empirical convergence matches theoretical predictions (fixed points, exponential/polynomial decay). The Hermite analysis accurately captures the dynamics.\\
 }
 
 % === COLUMN 3: Extensions & Takeaways ===
