@@ -30,6 +30,12 @@
 % \newtheorem{corollary}[theorem]{Corollary}
 \newcommand{\thomas}[1]{{\color{blue}\textit{#1}}}
 \newcommand{\amir}[1]{{\color{cyan}\textit{#1}}}
+\newcommand\blfootnote[1]{%
+  \begingroup
+  \renewcommand\thefootnote{}\footnote{#1}%
+  \addtocounter{footnote}{-1}%
+  \endgroup
+}
 \graphicspath{ {./figures/} }
 
 
@@ -55,7 +61,6 @@
 
 \begin{abstract}
 Understanding how neural networks transform input data across layers is fundamental to unraveling their learning and generalization capabilities. Although prior work has used insights from kernel methods to study neural networks, a global analysis of how the similarity between hidden representations evolves across layers remains underexplored. In this paper, we introduce a theoretical framework for the evolution of the kernel sequence, which measures the similarity between the hidden representation for two different inputs. Operating under the mean-field regime, we show that the kernel sequence evolves deterministically via a kernel map, which only depends on the activation function. By expanding activation using Hermite polynomials and using their algebraic properties, we derive an explicit form for kernel map and fully characterize its fixed points. Our analysis reveals that for non-linear activations, the kernel sequence converges globally to a unique fixed point, which can correspond to orthogonal or similar representations depending on the activation and network architecture. We further extend our results to networks with residual connections and normalization layers, demonstrating similar convergence behaviors. This work provides new insights into the implicit biases of deep neural networks and how architectural choices influence the evolution of representations across layers.
-\footnote{\small{Code available at: \url{https://github.com/username/repository}}}
 \end{abstract}
 
 
@@ -63,6 +68,7 @@ Understanding how neural networks transform input data across layers is fundamen
 % \label{ch:isometry_activation}
 % \section{Introduction}
 \section{INTRODUCTION}
+\blfootnote{Code is available at:\\ \url{https://github.com/ajoudaki/kernel-global}}
 Deep neural networks have revolutionized various fields, from computer vision to natural language processing, due to their remarkable ability to learn complex patterns from data. Understanding the internal mechanisms that govern their learning and generalization capabilities remains a fundamental challenge. 
 
 One approach to studying these transformations is through the lens of kernel methods. Kernel methods have a long history in machine learning for analyzing relationships between data points in high-dimensional spaces~\citep{scholkopf2002learning, smola2004tutorial}. They provide a framework for understanding the similarity measures that underpin many learning algorithms. Recent theoretical studies have increasingly focused on analyzing neural networks from the perspective of kernels. The Neural Tangent Kernel (NTK)~\citep{jacot2018neural} is a seminal work that provided a way to analyze the training dynamics of infinitely wide neural networks using kernel methods. This perspective has been further explored in various contexts, leading to significant advances in our understanding of neural networks~\citep{lee2019wide, arora2019exact, yang2019scaling}.
