@@ -1,6 +1,7 @@
 # Kernel Convergence in Deep Neural Networks
 
-This repository contains code and materials for research on kernel convergence properties in deep neural networks, with a focus on Hermite polynomial analysis of activation functions.
+This repository contains code and materials for the paper "Emergence of Globally Attracting Fixed Points in Deep Neural Networks With Nonlinear Activations", 
+which appeared in AISTATS 2025: https://openreview.net/forum?id=QDLKRmx07M
 
 ## Repository Structure
 
